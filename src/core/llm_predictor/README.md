@@ -6,10 +6,10 @@ This module provides a unified interface to interact with different Large Langua
 
 ```
 llm_predictor/
-├── __init__.py              # Exportações e interface pública do módulo
-├── llm_predictor.py         # Classe base abstrata (ABC)
-├── llm_factory.py           # Factory pattern para instanciação
-└── nvidia_predictor.py      # Implementação para NVIDIA API
+├── __init__.py              # Public interface and exports
+├── llm_predictor.py         # Abstract base class (ABC)
+├── llm_factory.py           # Factory pattern for instantiation
+└── nvidia_predictor.py      # NVIDIA API implementation
 ```
 
 ## 🏗️ Architecture
@@ -133,7 +133,7 @@ Supported Models (examples):
 - `meta/llama-4-maverick-17b-128e-instruct`
 - `meta/llama-4-scout-17b-16e-instruct`
 - `mistralai/mistral-small-3.1-24b-instruct-2503`
-- Qualquer modelo disponível na NVIDIA API
+- Any model available in the NVIDIA API
 
 Usage Example:
 ```python
@@ -306,7 +306,7 @@ response = predictor.predict(
 
 ### 3. Multi-turn Conversation
 ```python
-# Primeira mensagem
+# First message
 response1 = predictor.predict(
     system_prompt="You are a helpful assistant.",
     user_prompt="What is the capital of Brazil?",
@@ -387,10 +387,10 @@ predictor = LLMFactory.get_predictor("openai", "gpt-4")       # ❌ Not supporte
 ### Error: Rate limit or timeout
 Solution: NVIDIAPredictor already has automatic retries. Adjust if needed:
 ```python
-# Editar nvidia_predictor.py
+# Edit nvidia_predictor.py
 @retry(
-    stop=stop_after_attempt(5),  # Aumentar tentativas
-    wait=wait_exponential(multiplier=2, min=4, max=10)  # Aumentar backoff
+    stop=stop_after_attempt(5),  # Increase attempts
+    wait=wait_exponential(multiplier=2, min=4, max=10)  # Increase backoff
 )
 ```
 
@@ -401,7 +401,7 @@ response = predictor.predict(
     system_prompt="...",
     user_prompt="...",
     temperature=0.7,
-    max_output_tokens=2000  # Aumentar limite
+    max_output_tokens=2000  # Increase limit
 )
 ```
 
