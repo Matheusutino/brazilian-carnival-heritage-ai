@@ -596,7 +596,7 @@ class CaptionAnalyzer:
                 if len(family_data) > 0:
                     data_to_plot.append(family_data)
 
-                    # Ajuste da legenda
+                    # Legend adjustment
                     label = family.upper() if family.lower() == "llm" else family.capitalize()
                     tick_labels.append(label)
 
@@ -736,51 +736,51 @@ class CaptionAnalyzer:
             print("⚠ No per-model metric data available")
             return None
 
-        # ---------- Escolha dos marcadores por família ----------
+        # ---------- Marker selection by family ----------
         marker_map = {
             "classical": "o",
             "llm": "X",
         }
-        # (Não precisamos mais da coluna 'marker', o seaborn usa o 'style')
+        # (We no longer need the 'marker' column, seaborn uses 'style')
 
-        # ---------- MUDANÇA 1: Definir Ordem Categórica (Mais Robusto) ----------
-        
-        # 1. Defina a ordem exata que você quer
+        # ---------- CHANGE 1: Define Categorical Order (More Robust) ----------
+
+        # 1. Define the exact order you want
         custom_model_order = [
-            "BLIP", "ViT-GPT2", "GIT", 
+            "BLIP", "ViT-GPT2", "GIT",
             "Mistral Small 3.1", "LLaMA 4 - Scout", "LLaMA 4 - Maverick"
         ]
-        
-        # 2. Crie a lista final de modelos (preservando a ordem customizada)
+
+        # 2. Create the final model list (preserving custom order)
         all_models_in_df = long_df["model_display"].unique()
-        
+
         ordered_categories = [
-            model for model in custom_model_order 
+            model for model in custom_model_order
             if model in all_models_in_df
         ]
-        # Adiciona quaisquer outros modelos que não estavam na lista
+        # Add any other models that were not in the list
         ordered_categories.extend(
             [model for model in all_models_in_df if model not in ordered_categories]
         )
-        
-        # 3. Aplique a ordem como um tipo Categórico no Pandas
+
+        # 3. Apply the order as a Categorical type in Pandas
         model_cat_type = CategoricalDtype(categories=ordered_categories, ordered=True)
         long_df["model_display"] = long_df["model_display"].astype(model_cat_type)
 
-        # ---------- Plot (Usando Seaborn) ----------
+        # ---------- Plot (Using Seaborn) ----------
         plt.figure(figsize=(max(10, len(metric_columns_caps)*1.2),
                             max(6, len(profile_df)*0.4)))
-        
-        # O Seaborn 'lineplot' respeita a ordem categórica definida acima
+
+        # Seaborn 'lineplot' respects the categorical order defined above
         sns.lineplot(
             data=long_df,
             x="metric",
             y="score",
-            hue="model_display",  # Cria a legenda e cores pela ordem
-            style="family",       # Usa 'family' para os marcadores (o/X)
-            markers=marker_map,   # Passa o dict de marcadores
-            dashes=False,         # Remove tracejado
-            legend="full"         # Garante que a legenda seja criada
+            hue="model_display",  # Creates legend and colors by order
+            style="family",       # Uses 'family' for markers (o/X)
+            markers=marker_map,   # Passes the marker dict
+            dashes=False,         # Removes dashing
+            legend="full"         # Ensures that legend is created
         )
 
         plt.xlabel("Metrics", fontsize=12, fontweight="bold")
@@ -788,16 +788,16 @@ class CaptionAnalyzer:
         plt.xticks(rotation=45, ha="right")
         plt.grid(axis="y", alpha=0.3)
 
-        # ---------- MUDANÇA 2: Ajustar Posição da Legenda ----------
-        
-        # O Seaborn cria a legenda, só precisamos movê-la
+        # ---------- CHANGE 2: Adjust Legend Position ----------
+
+        # Seaborn creates the legend, we just need to move it
         plt.legend(
-            # Ajustado de -0.75 para -0.45 para não sobrepor
-            bbox_to_anchor=(0.5, -0.5), 
+            # Adjusted from -0.75 to -0.45 to avoid overlapping
+            bbox_to_anchor=(0.5, -0.5),
             loc="upper center",
             ncol=4,
             frameon=False
-            # O Seaborn nomeia o título automaticamente (model_display)
+            # Seaborn names the title automatically (model_display)
         )
 
         plt.tight_layout()
@@ -1017,29 +1017,29 @@ class CaptionAnalyzer:
 
         plt.tight_layout()
 
-        # Agora, desenhe as linhas no espaço exato *entre* os subplots.
+        # Now, draw the lines in the exact space *between* the subplots.
         if sample_count > 1:
             for idx in range(1, sample_count):
-                # Obter o eixo de texto *acima* da linha
+                # Get the text axis *above* the line
                 ax_above = axes[idx - 1, 1]
                 pos_above = ax_above.get_position()  # Bbox([x0, y0, width, height])
 
-                # Obter o eixo de texto *abaixo* da linha
+                # Get the text axis *below* the line
                 ax_below = axes[idx, 1]
                 pos_below = ax_below.get_position()
 
-                # O 'y' da linha é o ponto médio entre a parte *inferior* (y0) do eixo de cima
-                # e a parte *superior* (y1) do eixo de baixo.
-                # (pos_below.y1 é pos_below.y0 + pos_below.height)
+                # The line 'y' is the midpoint between the *bottom* (y0) of the upper axis
+                # and the *top* (y1) of the lower axis.
+                # (pos_below.y1 is pos_below.y0 + pos_below.height)
                 y_line = (pos_above.y0 + pos_below.y1) / 2.0
 
                 line = Line2D(
                     [0.02, 0.98],
-                    [y_line, y_line],         # Usar o y_line calculado
+                    [y_line, y_line],         # Use the calculated y_line
                     transform=fig.transFigure,
-                    color="#000000",          # Mudar para preto
+                    color="#000000",          # Change to black
                     linewidth=2,
-                    alpha=1.0,                # Mudar para opaco
+                    alpha=1.0,                # Change to opaque
                 )
                 fig.add_artist(line)
 

@@ -235,13 +235,13 @@ class UpscaleAnalyzer:
         print("2. ANALYSIS: ALL METRICS COMPARISON")
         print("="*80)
 
-        # --- parâmetros de controle ---
-        bar_width = 0.2       # controla a largura das barras
-        group_spacing = 1.1    # controla o espaçamento entre grupos (1 = padrão; <1 aproxima, >1 afasta)
+        # --- control parameters ---
+        bar_width = 0.2       # controls bar width
+        group_spacing = 1.1    # controls spacing between groups (1 = default; <1 brings closer, >1 spreads apart)
 
         fig, ax = plt.subplots(figsize=(20, 8))
 
-        # eixo x ajustado conforme o espaçamento entre grupos
+        # x-axis adjusted according to spacing between groups
         x = np.arange(len(self.df_normalized)) * group_spacing
 
         colors = ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#1abc9c']
@@ -295,7 +295,7 @@ class UpscaleAnalyzer:
         print("3. ANALYSIS: 2X VS 4X COMPARISON")
         print("="*80)
 
-        # Métodos base que existem nos dois scales
+        # Base methods that exist in both scales
         methods_2x = set(self.df_metrics[self.df_metrics['Scale'] == '2x']['Base_Method'].unique())
         methods_4x = set(self.df_metrics[self.df_metrics['Scale'] == '4x']['Base_Method'].unique())
         common_methods = sorted(list(methods_2x.intersection(methods_4x)))
@@ -311,10 +311,10 @@ class UpscaleAnalyzer:
 
         legend_handles = None
 
-        # >>> ajustes principais
-        group_gap = 1.55      # afasta os grupos no eixo x
-        width = 0.70          # engrossa a barra
-        label_pad_pts = 4     # distância do número para o topo da barra (em pontos)
+        # >>> main adjustments
+        group_gap = 1.55      # spreads groups apart on x-axis
+        width = 0.70          # thickens bars
+        label_pad_pts = 4     # distance from number to top of bar (in points)
 
         for idx, metric in enumerate(self.metric_cols):
             ax = axes[idx]
@@ -328,17 +328,17 @@ class UpscaleAnalyzer:
                 row_4x = self.df_metrics[(self.df_metrics['Scale'] == '4x') & (self.df_metrics['Base_Method'] == method)]
                 values_4x.append(row_4x[metric].iloc[0] if len(row_4x) > 0 else np.nan)
 
-            # x com espaçamento maior entre grupos
+            # x with larger spacing between groups
             x = np.arange(len(common_methods), dtype=float) * group_gap
 
-            # barras mais grossas
+            # thicker bars
             bars_2x = ax.bar(x - width/2, values_2x, width, label='2x', color='#3498db', alpha=0.8)
             bars_4x = ax.bar(x + width/2, values_4x, width, label='4x', color='#e74c3c', alpha=0.8)
 
             if legend_handles is None and len(bars_2x) and len(bars_4x):
                 legend_handles = (bars_2x[0], bars_4x[0])
 
-            # rótulos acima das barras (sem sobrepor)
+            # labels above bars (without overlapping)
             def add_value_labels(bars, fmt="{:.2f}"):
                 for b in bars:
                     h = b.get_height()
@@ -356,7 +356,7 @@ class UpscaleAnalyzer:
             add_value_labels(bars_2x)
             add_value_labels(bars_4x)
 
-            # dá folga no topo para os rótulos caberem
+            # gives space at the top for labels to fit
             finite_vals = [v for v in (values_2x + values_4x) if not np.isnan(v)]
             if finite_vals:
                 ymax = max(finite_vals)
@@ -855,7 +855,7 @@ class UpscaleAnalyzer:
                 ax = axes[idx]
                 ax.imshow(cropped_img)
                 if item['method'] is None:
-                    title = "Original\n(Referência)"
+                    title = "Original\n(Reference)"
                 else:
                     title = f"{item['label']}\n({item['type']})"
                 ax.set_title(title, fontsize=12, fontweight='bold')

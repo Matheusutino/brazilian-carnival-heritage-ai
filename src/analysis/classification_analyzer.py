@@ -477,10 +477,10 @@ class ClassificationAnalyzer:
 
             colors = plt.cm.Set3(np.linspace(0, 1, len(embeddings)))
 
-            # Espaço total ocupado pelas barras dentro de cada grupo (0–1)
-            group_width = 0.8          # deixa ~20% de gap entre grupos
+            # Total space occupied by bars within each group (0–1)
+            group_width = 0.8          # leaves ~20% gap between groups
             n = len(embeddings)
-            width = group_width / n     # largura de cada barra
+            width = group_width / n     # width of each bar
 
             for i, embedding in enumerate(embeddings):
                 values = []
@@ -491,12 +491,12 @@ class ClassificationAnalyzer:
                     ]
                     values.append(row[metric].iloc[0] if len(row) > 0 else 0)
 
-                # centraliza o bloco e posiciona cada barra dentro do bloco
+                # centers the block and positions each bar within the block
                 offset = (-group_width / 2) + i * width + (width / 2)
                 embedding_label = embedding_name_mapping.get(embedding, embedding)
                 bars = ax.bar(x + offset, values, width, label=embedding_label, color=colors[i], alpha=0.8)
 
-                # rótulos um pouco acima para não encostar
+                # labels slightly above to avoid touching
                 for bar, value in zip(bars, values):
                     h = bar.get_height()
                     ax.text(bar.get_x() + bar.get_width()/2., h + 0.01, f'{value:.3f}',
@@ -779,11 +779,11 @@ class ClassificationAnalyzer:
         else:
             axes = list(axes)
 
-        # define limite global para x
+        # define global limit for x
         max_f1s = [top_5_easy_sup['F1'].max(), top_5_hard_sup['F1'].max()]
         if cat_df_llm is not None:
             max_f1s += [top_5_easy_llm['F1'].max(), top_5_hard_llm['F1'].max()]
-        xmax_all = max(max_f1s) * 1.10  # 10% folga
+        xmax_all = max(max_f1s) * 1.10  # 10% margin
 
 
         # ---- SUPERISED - EASIEST ----
