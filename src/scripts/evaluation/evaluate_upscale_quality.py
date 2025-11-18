@@ -22,7 +22,19 @@ from src.core.evaluation.upscale_metrics import ImageQualityEvaluator
 
 
 def parse_args():
-    """Parse command-line arguments."""
+    """Parse command-line arguments for image quality evaluation.
+
+    Parses and validates command-line arguments for evaluating upscaled images
+    using various quality metrics.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments containing:
+            - upscaled_dir (str): Directory containing upscaled images to evaluate
+            - original_dir (str): Directory containing original images for comparison
+            - output_dir (str): Output directory for evaluation results
+            - n_workers (int): Number of parallel worker processes
+            - quiet (bool): Whether to suppress detailed output
+    """
     parser = argparse.ArgumentParser(
         description='Evaluate upscaled image quality'
     )
@@ -52,7 +64,26 @@ METRIC_LABELS = {
 
 
 def compute_aggregate_metrics(results):
-    """Compute aggregate statistics for successful evaluations."""
+    """Compute aggregate statistics for successful evaluations.
+
+    Calculates summary statistics (mean, std, min, max) for each quality metric
+    across all successfully evaluated images. Only includes results with 'success'
+    status to avoid skewing statistics with failed evaluations.
+
+    Args:
+        results (list): List of evaluation result dictionaries, each containing
+            status and metric values (sharpness, edge_strength, contrast, etc.)
+
+    Returns:
+        dict: Dictionary containing:
+            - total_images (int): Total number of images evaluated
+            - successful_images (int): Number of successfully evaluated images
+            - metrics (dict): Dictionary mapping metric names to statistics:
+                - mean (float): Average value across all images
+                - std (float): Standard deviation
+                - min (float): Minimum value
+                - max (float): Maximum value
+    """
     successful = [r for r in results if r['status'] == 'success']
 
     summary = {
@@ -83,10 +114,16 @@ def compute_aggregate_metrics(results):
 
 
 def print_metrics_summary(results):
-    """Print formatted metrics summary.
+    """Print formatted metrics summary to console.
+
+    Displays a formatted table showing summary statistics for all quality metrics
+    across evaluated images. Includes mean, standard deviation, minimum, and
+    maximum values for each metric.
 
     Args:
-        results (list): List of evaluation result dictionaries.
+        results (list): List of evaluation result dictionaries from the evaluator,
+            each containing quality metrics like sharpness, edge_strength, contrast,
+            oversharp, ringing, and self_consistency.
     """
     summary = compute_aggregate_metrics(results)
 
@@ -116,7 +153,27 @@ def print_metrics_summary(results):
 
 
 def main():
-    """Main execution function."""
+    """Main execution function for upscale quality evaluation.
+
+    Orchestrates the complete quality evaluation pipeline:
+    1. Parses command-line arguments
+    2. Discovers all images in the upscaled directory
+    3. Initializes the ImageQualityEvaluator with original images path
+    4. Evaluates all images using multiple quality metrics in parallel
+    5. Computes aggregate statistics across all images
+    6. Saves detailed results and summary to JSON file
+    7. Prints formatted summary to console (unless quiet mode)
+
+    Quality metrics evaluated include:
+    - Sharpness (Variance of Laplacian)
+    - Edge strength (Sobel operators)
+    - Contrast (standard deviation)
+    - Artifacts (over-sharpening and ringing detection)
+    - Self-consistency (PSNR with downsampled version)
+
+    Raises:
+        FileNotFoundError: If the upscaled directory does not exist.
+    """
     args = parse_args()
 
     upscaled_dir = Path(args.upscaled_dir)

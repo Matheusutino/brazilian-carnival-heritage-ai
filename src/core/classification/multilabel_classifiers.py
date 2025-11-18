@@ -458,7 +458,25 @@ class MultilabelClassifierPipeline:
         return summary
 
     def _print_metrics(self, metrics):
-        """Print evaluation metrics in a formatted way."""
+        """Print evaluation metrics in a formatted way.
+
+        Displays comprehensive evaluation metrics in a formatted table including
+        exact match accuracy, micro-averaged metrics (overall performance),
+        macro-averaged metrics (per-class average), and top/bottom performing
+        categories ranked by F1 score.
+
+        Args:
+            metrics (dict): Dictionary containing evaluation metrics:
+                - exact_match_accuracy (float): Fraction of samples with all labels correct
+                - accuracy_micro (float): Micro-averaged accuracy
+                - precision_micro (float): Micro-averaged precision
+                - recall_micro (float): Micro-averaged recall
+                - f1_micro (float): Micro-averaged F1 score
+                - precision_macro (float): Macro-averaged precision
+                - recall_macro (float): Macro-averaged recall
+                - f1_macro (float): Macro-averaged F1 score
+                - per_category (dict): Per-category metrics for each label
+        """
         print(f"\n{'='*60}")
         print(f"Metrics for {MultilabelClassifierFactory.get_classifier_info(self.classifier_type)['name']}")
         print(f"{'='*60}")

@@ -58,7 +58,23 @@ class ClassificationAnalyzer:
         self._load_data()
 
     def _load_data(self):
-        """Load all necessary data"""
+        """Load all necessary data for classification analysis.
+
+        Loads and initializes all required data files for comprehensive classification
+        analysis including:
+        - Supervised classifier metrics from comparison_metrics.csv
+        - LLM metrics from all model/strategy directories
+        - Comparison summary from JSON file
+        - Category-level metrics from category_metrics.csv
+        - Test dataset ground truth from splits/test.csv
+
+        After loading, combines dataframes and identifies best performing models.
+        Progress is printed to console for each loaded component.
+
+        Note:
+            If any required files are missing, warnings are printed but execution
+            continues to allow partial analysis with available data.
+        """
         print("Loading classification data...")
 
         # Load comparison metrics (supervised classifiers)
@@ -104,7 +120,26 @@ class ClassificationAnalyzer:
         self._identify_best_models()
 
     def _load_llm_metrics(self):
-        """Load LLM metrics from all strategy directories"""
+        """Load LLM metrics from all strategy directories.
+
+        Recursively scans the LLM results directory to find and load metrics from
+        all model and strategy combinations. For each configuration, computes
+        aggregate metrics including:
+        - Micro-averaged metrics (precision, recall, F1)
+        - Macro-averaged metrics (precision, recall, F1)
+        - Weighted F1 score
+        - Per-image metrics (exact match, hamming loss, Jaccard)
+
+        The function expects the directory structure:
+        results/classification/llm/{model_name}/{strategy_name}/metrics_latest.json
+
+        Results are stored in self.df_llm as a pandas DataFrame with one row per
+        model/strategy combination.
+
+        Note:
+            If any metrics file is corrupted or missing required fields, a warning
+            is printed and that configuration is skipped.
+        """
         llm_dir = self.results_path / 'llm'
 
         if not llm_dir.exists():
@@ -198,7 +233,21 @@ class ClassificationAnalyzer:
             print("  ⚠ No LLM metrics found")
 
     def _combine_dataframes(self):
-        """Combine supervised and LLM dataframes"""
+        """Combine supervised and LLM dataframes into a unified dataframe.
+
+        Merges the supervised classifier metrics and LLM metrics into a single
+        dataframe for unified analysis and comparison. Renames columns as needed
+        to ensure consistency between the two sources (e.g., 'Classifier' vs 'Model').
+
+        The combined dataframe enables direct comparison and visualization of
+        performance across all classification methods (both traditional ML and LLM-based).
+
+        Sets self.df_combined with the merged results, or None if either source
+        dataframe is missing.
+
+        Note:
+            Prints the total number of configurations in the combined dataframe.
+        """
         if self.df_supervised is None or self.df_llm is None:
             return
 
@@ -222,7 +271,23 @@ class ClassificationAnalyzer:
         print(f"  ✓ Combined dataframe: {len(self.df_combined)} total configurations")
 
     def _identify_best_models(self):
-        """Identify best supervised and LLM models by Macro F1"""
+        """Identify best supervised and LLM models by Macro F1 score.
+
+        Determines the best performing models in each category (supervised classifiers
+        and LLM-based classifiers) based on macro-averaged F1 score. Macro F1 is used
+        as it provides balanced performance assessment across all categories regardless
+        of class imbalance.
+
+        Sets:
+            self.best_supervised (dict): Row from df_supervised with highest Macro_F1
+            self.best_llm (dict): Row from df_llm with highest Macro_F1
+
+        The best models are used for detailed analysis and comparison throughout
+        the analyzer.
+
+        Note:
+            Prints information about the identified best models to console.
+        """
         if self.df_supervised is not None:
             best_idx = self.df_supervised['Macro_F1'].idxmax()
             self.best_supervised = {

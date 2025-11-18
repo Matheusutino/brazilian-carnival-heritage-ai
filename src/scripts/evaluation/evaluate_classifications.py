@@ -22,7 +22,18 @@ from src.core.evaluation.classification_metrics import (
 
 
 def parse_args():
-    """Parse command-line arguments."""
+    """Parse command-line arguments for classification evaluation.
+
+    Parses and validates command-line arguments for evaluating classification
+    predictions against ground truth labels.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments containing:
+            - predictions (str): Path to predictions NPZ file containing y_true,
+              y_pred, categories, and optionally test_paths
+            - output (str): Optional path to save evaluation metrics as JSON
+            - quiet (bool): Whether to suppress detailed console output
+    """
     parser = argparse.ArgumentParser(
         description='Evaluate classification predictions'
     )
@@ -70,7 +81,21 @@ def convert_to_dict_format(y_array, categories):
 
 
 def print_metrics(metrics, per_image_metrics):
-    """Print formatted metrics summary."""
+    """Print formatted metrics summary to console.
+
+    Displays comprehensive classification metrics in a formatted table including
+    per-image metrics (exact match, hamming loss, Jaccard), micro/macro/weighted
+    averages, and per-category performance.
+
+    Args:
+        metrics (dict): Dictionary containing per-category metrics and aggregated
+            metrics (micro_avg, macro_avg, weighted_avg) with precision, recall,
+            F1 score, accuracy, and support for each.
+        per_image_metrics (dict): Dictionary containing per-image evaluation metrics:
+            - exact_match_ratio (float): Fraction of samples with all labels correct
+            - hamming_loss (float): Fraction of labels incorrectly predicted
+            - jaccard_score (float): Average Jaccard similarity across samples
+    """
     print("\n" + "="*80)
     print("EVALUATION METRICS")
     print("="*80)
@@ -117,7 +142,27 @@ def print_metrics(metrics, per_image_metrics):
 
 
 def main():
-    """Main execution function."""
+    """Main execution function for classification evaluation.
+
+    Orchestrates the complete classification evaluation pipeline:
+    1. Parses command-line arguments
+    2. Loads predictions from NPZ file (y_true, y_pred, categories)
+    3. Converts array format to dictionary format for metrics calculation
+    4. Calculates comprehensive multilabel classification metrics:
+       - Per-image metrics (exact match, hamming loss, Jaccard)
+       - Per-category metrics (precision, recall, F1, support)
+       - Aggregate metrics (micro, macro, weighted averages)
+    5. Prints formatted metrics summary to console (unless quiet mode)
+    6. Optionally saves results to JSON file
+
+    The evaluation uses specialized multilabel metrics from the classification_metrics
+    module to properly assess performance on multilabel classification tasks where
+    each sample can have multiple labels.
+
+    Raises:
+        FileNotFoundError: If the predictions file does not exist.
+        KeyError: If required keys are missing from the NPZ file.
+    """
     args = parse_args()
 
     predictions_path = Path(args.predictions)

@@ -19,7 +19,19 @@ sys.path.insert(0, str(project_root))
 
 
 def parse_args():
-    """Parse command-line arguments."""
+    """Parse command-line arguments for train/test split creation.
+
+    Parses and validates command-line arguments for creating a stratified
+    train/test split of the multilabel classification dataset.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments containing:
+            - dataset (str): Path to the dataset CSV file
+            - categories (str): Path to the categories CSV file
+            - output (str): Output path for split JSON file
+            - test_size (float): Proportion of dataset to include in test split
+            - random_state (int): Random seed for reproducibility
+    """
     parser = argparse.ArgumentParser(
         description='Create stratified train/test split for multilabel classification'
     )
@@ -47,7 +59,24 @@ def load_categories(categories_path):
 
 
 def main():
-    """Main execution function."""
+    """Main execution function for creating stratified train/test split.
+
+    Orchestrates the complete process of creating a stratified train/test split
+    for multilabel classification:
+    1. Loads categories and dataset from CSV files
+    2. Filters images and removes duplicates/metadata files
+    3. Merges dataset with category labels
+    4. Performs iterative stratified splitting to maintain label distribution
+    5. Saves split indices, metadata, and separate train/test CSV files
+
+    The function uses iterative stratification to ensure that label distributions
+    are preserved across both train and test sets, which is crucial for multilabel
+    classification where each image can have multiple labels.
+
+    Raises:
+        FileNotFoundError: If dataset or categories files are not found.
+        pd.errors.EmptyDataError: If CSV files are empty.
+    """
     args = parse_args()
 
     print("="*80)
