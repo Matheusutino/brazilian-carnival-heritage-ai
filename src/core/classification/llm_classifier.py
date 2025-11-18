@@ -96,7 +96,23 @@ class ImageClassifier:
             self.validator = Draft7Validator(self.output_schema)
 
     def _encode_image(self, image_path: Path) -> str:
-        """Encode image as base64, resizing when max_image_dim is configured."""
+        """Encode image as base64, resizing when max_image_dim is configured.
+
+        Loads an image from disk and encodes it as a base64 string suitable for
+        sending to multimodal LLMs. If max_image_dim is configured, the image is
+        resized proportionally to fit within the specified maximum dimension while
+        preserving aspect ratio.
+
+        Args:
+            image_path (Path): Path to the image file to encode.
+
+        Returns:
+            str: Base64-encoded image string (without data URI prefix).
+
+        Raises:
+            FileNotFoundError: If the image file does not exist.
+            PIL.UnidentifiedImageError: If the file is not a valid image.
+        """
         max_dim = self.max_image_dim
         encoded, _ = encode_image_for_llm(
             image_path,

@@ -20,7 +20,21 @@ from bert_score import score as bert_score
 
 
 def download_nltk_data():
-    """Download required NLTK data if not already present."""
+    """Download required NLTK data if not already present.
+
+    Checks for and downloads necessary NLTK datasets for caption evaluation:
+    - punkt: Tokenizer for sentence and word tokenization
+    - wordnet: Lexical database for METEOR metric
+    - omw-1.4: Open Multilingual WordNet for extended language support
+
+    This function is called automatically by evaluate_caption_pairs() and only
+    downloads data that is not already cached locally, making it safe to call
+    multiple times.
+
+    Note:
+        Downloads may take a few seconds on first run. Subsequent calls will
+        detect existing data and skip downloads.
+    """
     try:
         nltk.data.find('tokenizers/punkt')
     except LookupError:
@@ -286,9 +300,21 @@ def evaluate_caption_pairs(references: List[str],
 def print_metrics_summary(results: Dict, caption_type: str = None):
     """Print evaluation metrics in a formatted table.
 
+    Displays a comprehensive summary of caption evaluation metrics in a formatted
+    table showing mean, standard deviation, minimum, maximum, and median values
+    for each metric across all evaluated caption pairs.
+
     Args:
-        results (Dict): Results dictionary from evaluate_caption_pairs.
-        caption_type (str, optional): Type label for display.
+        results (Dict): Results dictionary from evaluate_caption_pairs containing:
+            - num_pairs (int): Number of evaluated pairs
+            - metrics (dict): Dictionary of metric statistics (mean, std, min, max, median)
+            - per_image (list): Per-image detailed metrics
+        caption_type (str, optional): Type label for display (e.g., 'caption_generator',
+            'llm_classifier'). If provided, shown in the header.
+
+    Example:
+        >>> results = evaluate_caption_pairs(refs, hyps)
+        >>> print_metrics_summary(results, 'caption_generator')
     """
     print(f"\n{'='*80}")
     if caption_type:

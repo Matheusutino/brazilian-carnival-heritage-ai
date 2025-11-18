@@ -99,11 +99,23 @@ class FeatureExtractor:
     def extract_from_path(self, image_path):
         """Extract features from an image file.
 
+        Loads an image from disk and extracts deep learning features using the
+        configured vision model (DINOv2 or ConvNeXtV2). The image is automatically
+        converted to RGB format and preprocessed according to the model's requirements.
+
         Args:
-            image_path (str or Path): Path to the image file.
+            image_path (str or Path): Path to the image file. Supports common formats
+                including JPG, PNG, BMP, etc.
 
         Returns:
-            np.ndarray: Feature vector of shape (feature_dim,).
+            np.ndarray: Feature vector of shape (feature_dim,) where feature_dim
+                depends on the model (e.g., 384 for dinov2-small, 768 for dinov2-base).
+                Features are extracted from the model's final layer (CLS token for
+                DINOv2, global pooling for ConvNeXt).
+
+        Raises:
+            FileNotFoundError: If the image file does not exist.
+            PIL.UnidentifiedImageError: If the file is not a valid image.
         """
         image = Image.open(image_path).convert('RGB')
         return self.extract_from_image(image)

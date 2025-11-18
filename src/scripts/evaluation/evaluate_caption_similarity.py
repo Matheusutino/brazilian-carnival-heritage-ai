@@ -135,7 +135,20 @@ def evaluate_captions(human_desc: Dict[str, str],
     return results
 
 
-def main():
+def parse_args():
+    """Parse command-line arguments for caption similarity evaluation.
+
+    Parses and validates command-line arguments for evaluating caption similarity
+    between human-written descriptions and generated captions using multiple metrics.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments containing:
+            - csv (str): Path to dataset CSV file with human descriptions
+            - caption_generator (str): Path to JSON file with caption_generator outputs
+            - llm_classifier (str): Path to JSON file with llm_classifier outputs
+            - output (str): Path to save evaluation results JSON file
+            - bert_model (str): BERT model identifier for BERTScore computation
+    """
     parser = argparse.ArgumentParser(description='Evaluate caption similarity metrics')
     parser.add_argument('--csv', type=str, required=True,
                         help='Path to dataset_completo.csv')
@@ -149,7 +162,32 @@ def main():
                         default='neuralmind/bert-base-portuguese-cased',
                         help='BERT model for BERTScore (default: Portuguese BERT)')
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    """Main execution function for caption similarity evaluation.
+
+    Orchestrates the complete caption evaluation pipeline:
+    1. Parses command-line arguments
+    2. Loads human-written descriptions from dataset CSV
+    3. Loads generated captions from caption_generator and/or llm_classifier
+    4. Evaluates each set of captions using multiple metrics:
+       - BLEU (1-4 grams)
+       - METEOR
+       - ROUGE-L
+       - BERTScore (using Portuguese BERT)
+    5. Prints formatted metrics summary for each caption source
+    6. Saves comprehensive results to JSON file
+
+    The evaluation compares generated captions against human reference descriptions
+    to assess the quality and similarity of automatic caption generation systems.
+
+    Raises:
+        FileNotFoundError: If required input files are not found.
+        ValueError: If JSON format is not supported.
+    """
+    args = parse_args()
 
     # Load human descriptions
     print(f"Loading human descriptions from {args.csv}...")
