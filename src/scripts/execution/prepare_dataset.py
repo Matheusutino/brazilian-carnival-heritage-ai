@@ -61,7 +61,7 @@ def main():
         bool: True if all steps succeed, False if any step fails.
     """
     print("\n" + "="*80)
-    print("PREPARAÇÃO DO DATASET - BLOCO SUVACO DE CRISTO")
+    print("DATASET PREPARATION - BLOCO SUVACO DE CRISTO")
     print("="*80)
 
     # Determine project root and script locations
@@ -74,61 +74,61 @@ def main():
 
     # Validate that required scripts exist
     if not process_script.exists():
-        print(f"✗ Erro: Script não encontrado: {process_script}")
+        print(f"✗ Error: Script not found: {process_script}")
         return False
 
     if not download_script.exists():
-        print(f"✗ Erro: Script não encontrado: {download_script}")
+        print(f"✗ Error: Script not found: {download_script}")
         return False
 
     # Step 1: Process data (extract hyperlinks and process categories)
-    print("\nPASSO 1: Processamento de dados (hyperlinks e categorias)")
+    print("\nSTEP 1: Data processing (hyperlinks and categories)")
     print("-" * 80)
     success = run_script(
         str(process_script),
-        "Processamento de dados"
+        "Data processing"
     )
 
     if not success:
-        print("\n✗ Falha no processamento de dados. Abortando...")
+        print("\n✗ Data processing failed. Aborting...")
         return False
 
     # Step 2: Download files from Google Drive
-    print("\n\nPASSO 2: Download de arquivos do Google Drive")
+    print("\n\nSTEP 2: Downloading files from Google Drive")
     print("-" * 80)
     success = run_script(
         str(download_script),
-        "Download de arquivos"
+        "File download"
     )
 
     if not success:
-        print("\n✗ Falha no download de arquivos. Verifique os logs acima.")
+        print("\n✗ File download failed. Check logs above.")
         return False
 
     # Step 3: Re-run processing to generate final dataset with downloaded files
-    print("\n\nPASSO 3: Gerando dataset final com arquivos baixados")
+    print("\n\nSTEP 3: Generating final dataset with downloaded files")
     print("-" * 80)
     success = run_script(
         str(process_script),
-        "Geração do dataset final"
+        "Final dataset generation"
     )
 
     if not success:
-        print("\n✗ Falha na geração do dataset final. Verifique os logs acima.")
+        print("\n✗ Final dataset generation failed. Check logs above.")
         return False
 
-    # Finalização
+    # Finalization
     print("\n" + "="*80)
-    print("✓ PREPARAÇÃO DO DATASET CONCLUÍDA COM SUCESSO!")
+    print("✓ DATASET PREPARATION COMPLETED SUCCESSFULLY!")
     print("="*80)
-    print("\nArquivos gerados:")
+    print("\nGenerated files:")
     print("  - dataset/catalogacao_with_hyperlinks.csv")
     print("  - dataset/palavras_chave.csv")
     print("  - dataset/palavras_chave_processed.csv")
     print("  - dataset/catalogacao_with_local_paths.csv")
     print("  - dataset/dataset_completo.csv")
-    print("  - dataset/downloaded/ (arquivos baixados)")
-    print("\n✓ Pronto para análise!")
+    print("  - dataset/downloaded/ (downloaded files)")
+    print("\n✓ Ready for analysis!")
 
     return True
 
