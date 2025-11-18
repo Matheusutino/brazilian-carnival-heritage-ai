@@ -1,0 +1,368 @@
+{
+  "timestamp": "2025-10-25T12:06:45.572666",
+  "total_methods": 24,
+  "feature_models": [
+    "convnextv2-base",
+    "dinov2-base",
+    "convnextv2-tiny",
+    "dinov2-small"
+  ],
+  "classifiers": [
+    "rf",
+    "lda",
+    "nb",
+    "tree",
+    "passive_aggressive",
+    "xgb"
+  ],
+  "best_overall": {
+    "method": "dinov2-base_lda",
+    "feature_model": "dinov2-base",
+    "classifier": "lda",
+    "composite_score": 1.0,
+    "macro_f1": 0.6648049776897978,
+    "exact_match": 0.35714285714285715
+  },
+  "best_per_metric": {
+    "Exact_Match": {
+      "method": "dinov2-base_lda",
+      "feature_model": "dinov2-base",
+      "classifier": "lda",
+      "score": 0.35714285714285715
+    },
+    "Jaccard": {
+      "method": "dinov2-base_lda",
+      "feature_model": "dinov2-base",
+      "classifier": "lda",
+      "score": 0.6194444444444445
+    },
+    "Micro_F1": {
+      "method": "dinov2-base_lda",
+      "feature_model": "dinov2-base",
+      "classifier": "lda",
+      "score": 0.7323943661971831
+    },
+    "Macro_F1": {
+      "method": "dinov2-base_lda",
+      "feature_model": "dinov2-base",
+      "classifier": "lda",
+      "score": 0.6648049776897978
+    },
+    "Weighted_F1": {
+      "method": "dinov2-base_lda",
+      "feature_model": "dinov2-base",
+      "classifier": "lda",
+      "score": 0.7317784320039331
+    },
+    "Hamming_Loss": {
+      "method": "dinov2-base_lda",
+      "feature_model": "dinov2-base",
+      "classifier": "lda",
+      "score": 0.05483405483405483
+    }
+  },
+  "rankings": [
+    {
+      "Method": "dinov2-base_lda",
+      "Feature_Model": "dinov2-base",
+      "Classifier": "lda",
+      "Composite_Score": 1.0,
+      "Macro_F1": 0.6648049776897978
+    },
+    {
+      "Method": "dinov2-base_passive_aggressive",
+      "Feature_Model": "dinov2-base",
+      "Classifier": "passive_aggressive",
+      "Composite_Score": 0.9392606265884992,
+      "Macro_F1": 0.631494153333758
+    },
+    {
+      "Method": "dinov2-small_lda",
+      "Feature_Model": "dinov2-small",
+      "Classifier": "lda",
+      "Composite_Score": 0.8568519220132059,
+      "Macro_F1": 0.6260578226916581
+    },
+    {
+      "Method": "dinov2-base_nb",
+      "Feature_Model": "dinov2-base",
+      "Classifier": "nb",
+      "Composite_Score": 0.7564102043951157,
+      "Macro_F1": 0.5755318366254227
+    },
+    {
+      "Method": "dinov2-small_passive_aggressive",
+      "Feature_Model": "dinov2-small",
+      "Classifier": "passive_aggressive",
+      "Composite_Score": 0.7370913661229138,
+      "Macro_F1": 0.5739510863911644
+    },
+    {
+      "Method": "dinov2-small_xgb",
+      "Feature_Model": "dinov2-small",
+      "Classifier": "xgb",
+      "Composite_Score": 0.6997526635378208,
+      "Macro_F1": 0.4657025644238957
+    },
+    {
+      "Method": "dinov2-small_nb",
+      "Feature_Model": "dinov2-small",
+      "Classifier": "nb",
+      "Composite_Score": 0.6838671257015241,
+      "Macro_F1": 0.5696388958783181
+    },
+    {
+      "Method": "dinov2-base_xgb",
+      "Feature_Model": "dinov2-base",
+      "Classifier": "xgb",
+      "Composite_Score": 0.6088286748947912,
+      "Macro_F1": 0.4105729211581865
+    },
+    {
+      "Method": "convnextv2-tiny_lda",
+      "Feature_Model": "convnextv2-tiny",
+      "Classifier": "lda",
+      "Composite_Score": 0.6084926391648459,
+      "Macro_F1": 0.47291326927509036
+    },
+    {
+      "Method": "convnextv2-base_lda",
+      "Feature_Model": "convnextv2-base",
+      "Classifier": "lda",
+      "Composite_Score": 0.5577484190513599,
+      "Macro_F1": 0.4551950238262611
+    },
+    {
+      "Method": "convnextv2-tiny_xgb",
+      "Feature_Model": "convnextv2-tiny",
+      "Classifier": "xgb",
+      "Composite_Score": 0.46504953303295554,
+      "Macro_F1": 0.31981046166618554
+    },
+    {
+      "Method": "convnextv2-base_xgb",
+      "Feature_Model": "convnextv2-base",
+      "Classifier": "xgb",
+      "Composite_Score": 0.46261133603771,
+      "Macro_F1": 0.3349651508073738
+    },
+    {
+      "Method": "convnextv2-tiny_passive_aggressive",
+      "Feature_Model": "convnextv2-tiny",
+      "Classifier": "passive_aggressive",
+      "Composite_Score": 0.4400056336738756,
+      "Macro_F1": 0.455700272768
+    },
+    {
+      "Method": "convnextv2-tiny_nb",
+      "Feature_Model": "convnextv2-tiny",
+      "Classifier": "nb",
+      "Composite_Score": 0.41164636439590224,
+      "Macro_F1": 0.4722620627919396
+    },
+    {
+      "Method": "dinov2-small_rf",
+      "Feature_Model": "dinov2-small",
+      "Classifier": "rf",
+      "Composite_Score": 0.40145501639894987,
+      "Macro_F1": 0.2953665149831245
+    },
+    {
+      "Method": "convnextv2-base_passive_aggressive",
+      "Feature_Model": "convnextv2-base",
+      "Classifier": "passive_aggressive",
+      "Composite_Score": 0.38067554481145066,
+      "Macro_F1": 0.39618289660274014
+    },
+    {
+      "Method": "dinov2-small_tree",
+      "Feature_Model": "dinov2-small",
+      "Classifier": "tree",
+      "Composite_Score": 0.3651771465998854,
+      "Macro_F1": 0.42218002721018805
+    },
+    {
+      "Method": "dinov2-base_rf",
+      "Feature_Model": "dinov2-base",
+      "Classifier": "rf",
+      "Composite_Score": 0.342870435415106,
+      "Macro_F1": 0.2758556211689788
+    },
+    {
+      "Method": "convnextv2-base_nb",
+      "Feature_Model": "convnextv2-base",
+      "Classifier": "nb",
+      "Composite_Score": 0.30418879141393323,
+      "Macro_F1": 0.4350234397861494
+    },
+    {
+      "Method": "dinov2-base_tree",
+      "Feature_Model": "dinov2-base",
+      "Classifier": "tree",
+      "Composite_Score": 0.28418426469464153,
+      "Macro_F1": 0.3443542835582912
+    },
+    {
+      "Method": "convnextv2-base_tree",
+      "Feature_Model": "convnextv2-base",
+      "Classifier": "tree",
+      "Composite_Score": 0.23749181847548742,
+      "Macro_F1": 0.3237195702548636
+    },
+    {
+      "Method": "convnextv2-tiny_tree",
+      "Feature_Model": "convnextv2-tiny",
+      "Classifier": "tree",
+      "Composite_Score": 0.22488065559828177,
+      "Macro_F1": 0.3451967572688701
+    },
+    {
+      "Method": "convnextv2-base_rf",
+      "Feature_Model": "convnextv2-base",
+      "Classifier": "rf",
+      "Composite_Score": 0.17750011549432665,
+      "Macro_F1": 0.17661223148134625
+    },
+    {
+      "Method": "convnextv2-tiny_rf",
+      "Feature_Model": "convnextv2-tiny",
+      "Classifier": "rf",
+      "Composite_Score": 0.1457326892109501,
+      "Macro_F1": 0.16358406917004945
+    }
+  ],
+  "category_performance": {
+    "suvaquinho": {
+      "F1": 0.0,
+      "Precision": 0.0,
+      "Recall": 0.0,
+      "Support": 1
+    },
+    "produção": {
+      "F1": 0.0,
+      "Precision": 0.0,
+      "Recall": 0.0,
+      "Support": 1
+    },
+    "outros": {
+      "F1": 0.07638888888888888,
+      "Precision": 0.07421023965141611,
+      "Recall": 0.09722222222222221,
+      "Support": 3
+    },
+    "estandarte\n/bandeira": {
+      "F1": 0.15885205162665117,
+      "Precision": 0.16353528853528854,
+      "Recall": 0.18055555555555555,
+      "Support": 9
+    },
+    "bateria": {
+      "F1": 0.2944656112801028,
+      "Precision": 0.41937789464185177,
+      "Recall": 0.3229166666666667,
+      "Support": 16
+    },
+    "ensaio": {
+      "F1": 0.304265873015873,
+      "Precision": 0.3659722222222222,
+      "Recall": 0.3020833333333333,
+      "Support": 4
+    },
+    "premiação": {
+      "F1": 0.33996165871165873,
+      "Precision": 0.48543320105820104,
+      "Recall": 0.3273809523809524,
+      "Support": 7
+    },
+    "serpentina \nde ouro": {
+      "F1": 0.3416361717992153,
+      "Precision": 0.49476947577276525,
+      "Recall": 0.32142857142857145,
+      "Support": 7
+    },
+    "multidão": {
+      "F1": 0.3515873015873016,
+      "Precision": 0.3333874458874459,
+      "Recall": 0.4166666666666667,
+      "Support": 3
+    },
+    "concentração": {
+      "F1": 0.4331169658518883,
+      "Precision": 0.6289312421877677,
+      "Recall": 0.4056603773584906,
+      "Support": 53
+    },
+    "camiseta": {
+      "F1": 0.4441385188726799,
+      "Precision": 0.6945000981923556,
+      "Recall": 0.40994623655913975,
+      "Support": 31
+    },
+    "mestre-sala": {
+      "F1": 0.45608420986277465,
+      "Precision": 0.6702252383436482,
+      "Recall": 0.4328703703703704,
+      "Support": 18
+    },
+    "adereços": {
+      "F1": 0.46815035665213306,
+      "Precision": 0.5477926892216333,
+      "Recall": 0.4967948717948718,
+      "Support": 13
+    },
+    "porta-bandeira": {
+      "F1": 0.499154859543526,
+      "Precision": 0.6917091731592748,
+      "Recall": 0.4772727272727273,
+      "Support": 22
+    },
+    "desfile": {
+      "F1": 0.5251434751826718,
+      "Precision": 0.6902921510841432,
+      "Recall": 0.47361111111111115,
+      "Support": 60
+    },
+    "fantasia": {
+      "F1": 0.5921193976091148,
+      "Precision": 0.6274057618656697,
+      "Recall": 0.5877659574468085,
+      "Support": 94
+    },
+    "show/festa": {
+      "F1": 0.6204375454975293,
+      "Precision": 0.6874361405655982,
+      "Recall": 0.5952380952380952,
+      "Support": 49
+    },
+    "baianas": {
+      "F1": 0.6385355784339021,
+      "Precision": 0.6876604130121131,
+      "Recall": 0.6496212121212122,
+      "Support": 22
+    },
+    "imprensa": {
+      "F1": 0.6614704619297652,
+      "Precision": 0.7234248014938552,
+      "Recall": 0.6636904761904762,
+      "Support": 14
+    },
+    "foliões": {
+      "F1": 0.7063576349002174,
+      "Precision": 0.7519040315181487,
+      "Recall": 0.6724877450980392,
+      "Support": 136
+    },
+    "letra": {
+      "F1": 0.7221265118323942,
+      "Precision": 0.9070241101491101,
+      "Recall": 0.6574074074074073,
+      "Support": 9
+    },
+    "samba": {
+      "F1": 0.7221265118323942,
+      "Precision": 0.9070241101491101,
+      "Recall": 0.6574074074074073,
+      "Support": 9
+    }
+  }
+}

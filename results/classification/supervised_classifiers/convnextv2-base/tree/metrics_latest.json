@@ -1,0 +1,300 @@
+{
+  "timestamp": "2025-10-24T14:16:58.150249",
+  "predictions_file": "results/classification/supervised_classifiers/convnextv2-base/tree/test_predictions.npz",
+  "n_samples": 252,
+  "n_categories": 22,
+  "categories": [
+    "adereços",
+    "baianas",
+    "bateria",
+    "camiseta",
+    "concentração",
+    "desfile",
+    "ensaio",
+    "estandarte\n/bandeira",
+    "fantasia",
+    "foliões",
+    "imprensa",
+    "letra",
+    "mestre-sala",
+    "multidão",
+    "porta-bandeira",
+    "premiação",
+    "produção",
+    "samba",
+    "serpentina \nde ouro",
+    "show/festa",
+    "suvaquinho",
+    "outros"
+  ],
+  "per_image_metrics": {
+    "exact_match_ratio": 0.1388888888888889,
+    "hamming_loss": 0.10642135642135642,
+    "jaccard_score": 0.35930650037792894
+  },
+  "metrics": {
+    "adereços": {
+      "tp": 5,
+      "fp": 9,
+      "tn": 230,
+      "fn": 8,
+      "precision": 0.35714285714285715,
+      "recall": 0.38461538461538464,
+      "f1": 0.37037037037037035,
+      "accuracy": 0.9325396825396826,
+      "support": 13
+    },
+    "baianas": {
+      "tp": 4,
+      "fp": 8,
+      "tn": 222,
+      "fn": 18,
+      "precision": 0.3333333333333333,
+      "recall": 0.18181818181818182,
+      "f1": 0.23529411764705882,
+      "accuracy": 0.8968253968253969,
+      "support": 22
+    },
+    "bateria": {
+      "tp": 2,
+      "fp": 8,
+      "tn": 228,
+      "fn": 14,
+      "precision": 0.2,
+      "recall": 0.125,
+      "f1": 0.15384615384615385,
+      "accuracy": 0.9126984126984127,
+      "support": 16
+    },
+    "camiseta": {
+      "tp": 6,
+      "fp": 25,
+      "tn": 196,
+      "fn": 25,
+      "precision": 0.1935483870967742,
+      "recall": 0.1935483870967742,
+      "f1": 0.1935483870967742,
+      "accuracy": 0.8015873015873016,
+      "support": 31
+    },
+    "concentração": {
+      "tp": 17,
+      "fp": 20,
+      "tn": 179,
+      "fn": 36,
+      "precision": 0.4594594594594595,
+      "recall": 0.32075471698113206,
+      "f1": 0.37777777777777777,
+      "accuracy": 0.7777777777777778,
+      "support": 53
+    },
+    "desfile": {
+      "tp": 31,
+      "fp": 27,
+      "tn": 165,
+      "fn": 29,
+      "precision": 0.5344827586206896,
+      "recall": 0.5166666666666667,
+      "f1": 0.5254237288135594,
+      "accuracy": 0.7777777777777778,
+      "support": 60
+    },
+    "ensaio": {
+      "tp": 2,
+      "fp": 3,
+      "tn": 245,
+      "fn": 2,
+      "precision": 0.4,
+      "recall": 0.5,
+      "f1": 0.4444444444444444,
+      "accuracy": 0.9801587301587301,
+      "support": 4
+    },
+    "estandarte\n/bandeira": {
+      "tp": 1,
+      "fp": 11,
+      "tn": 232,
+      "fn": 8,
+      "precision": 0.08333333333333333,
+      "recall": 0.1111111111111111,
+      "f1": 0.09523809523809523,
+      "accuracy": 0.9246031746031746,
+      "support": 9
+    },
+    "fantasia": {
+      "tp": 57,
+      "fp": 41,
+      "tn": 117,
+      "fn": 37,
+      "precision": 0.5816326530612245,
+      "recall": 0.6063829787234043,
+      "f1": 0.59375,
+      "accuracy": 0.6904761904761905,
+      "support": 94
+    },
+    "foliões": {
+      "tp": 84,
+      "fp": 32,
+      "tn": 84,
+      "fn": 52,
+      "precision": 0.7241379310344828,
+      "recall": 0.6176470588235294,
+      "f1": 0.6666666666666666,
+      "accuracy": 0.6666666666666666,
+      "support": 136
+    },
+    "imprensa": {
+      "tp": 9,
+      "fp": 5,
+      "tn": 233,
+      "fn": 5,
+      "precision": 0.6428571428571429,
+      "recall": 0.6428571428571429,
+      "f1": 0.6428571428571429,
+      "accuracy": 0.9603174603174603,
+      "support": 14
+    },
+    "letra": {
+      "tp": 5,
+      "fp": 2,
+      "tn": 241,
+      "fn": 4,
+      "precision": 0.7142857142857143,
+      "recall": 0.5555555555555556,
+      "f1": 0.625,
+      "accuracy": 0.9761904761904762,
+      "support": 9
+    },
+    "mestre-sala": {
+      "tp": 5,
+      "fp": 12,
+      "tn": 222,
+      "fn": 13,
+      "precision": 0.29411764705882354,
+      "recall": 0.2777777777777778,
+      "f1": 0.2857142857142857,
+      "accuracy": 0.9007936507936508,
+      "support": 18
+    },
+    "multidão": {
+      "tp": 1,
+      "fp": 4,
+      "tn": 245,
+      "fn": 2,
+      "precision": 0.2,
+      "recall": 0.3333333333333333,
+      "f1": 0.25,
+      "accuracy": 0.9761904761904762,
+      "support": 3
+    },
+    "porta-bandeira": {
+      "tp": 11,
+      "fp": 23,
+      "tn": 207,
+      "fn": 11,
+      "precision": 0.3235294117647059,
+      "recall": 0.5,
+      "f1": 0.39285714285714285,
+      "accuracy": 0.8650793650793651,
+      "support": 22
+    },
+    "premiação": {
+      "tp": 0,
+      "fp": 5,
+      "tn": 240,
+      "fn": 7,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.9523809523809523,
+      "support": 7
+    },
+    "produção": {
+      "tp": 0,
+      "fp": 4,
+      "tn": 247,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.9801587301587301,
+      "support": 1
+    },
+    "samba": {
+      "tp": 5,
+      "fp": 2,
+      "tn": 241,
+      "fn": 4,
+      "precision": 0.7142857142857143,
+      "recall": 0.5555555555555556,
+      "f1": 0.625,
+      "accuracy": 0.9761904761904762,
+      "support": 9
+    },
+    "serpentina \nde ouro": {
+      "tp": 1,
+      "fp": 5,
+      "tn": 240,
+      "fn": 6,
+      "precision": 0.16666666666666666,
+      "recall": 0.14285714285714285,
+      "f1": 0.15384615384615385,
+      "accuracy": 0.9563492063492064,
+      "support": 7
+    },
+    "show/festa": {
+      "tp": 25,
+      "fp": 28,
+      "tn": 175,
+      "fn": 24,
+      "precision": 0.4716981132075472,
+      "recall": 0.5102040816326531,
+      "f1": 0.49019607843137253,
+      "accuracy": 0.7936507936507936,
+      "support": 49
+    },
+    "suvaquinho": {
+      "tp": 0,
+      "fp": 1,
+      "tn": 250,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.9920634920634921,
+      "support": 1
+    },
+    "outros": {
+      "tp": 0,
+      "fp": 5,
+      "tn": 244,
+      "fn": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 0.9682539682539683,
+      "support": 3
+    },
+    "micro_avg": {
+      "precision": 0.49183303085299457,
+      "recall": 0.4664371772805508,
+      "f1": 0.4787985865724382,
+      "accuracy": 0.1388888888888889,
+      "total_support": 581
+    },
+    "macro_avg": {
+      "precision": 0.33611414196402134,
+      "recall": 0.3216220488820612,
+      "f1": 0.3237195702548636,
+      "accuracy": 0.8935786435786436,
+      "total_support": 581
+    },
+    "weighted_avg": {
+      "precision": 0.503014659432168,
+      "recall": 0.4664371772805508,
+      "f1": 0.4802010367004927,
+      "accuracy": 0.7802502527115264,
+      "total_support": 581
+    }
+  }
+}

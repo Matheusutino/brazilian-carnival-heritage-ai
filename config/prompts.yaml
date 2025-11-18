@@ -1,0 +1,649 @@
+# Configuração de prompts para análise de imagens
+# Bloco Suvaco de Cristo - Catalogação de Acervo
+
+# Contexto sobre o Bloco Suvaco de Cristo
+contexto:
+  nome: "Suvaco de Cristo"
+  local: "Rio de Janeiro, Brasil"
+  evento: "Carnaval"
+  descricao: |
+    O Bloco Suvaco de Cristo é um tradicional bloco de carnaval do Rio de Janeiro.
+    As imagens do acervo documentam a história, cultura e momentos marcantes do bloco ao longo dos anos.
+
+# =============================================================================
+# PROMPT 1: CAPTIONING / DESCRIÇÃO DE IMAGENS
+# =============================================================================
+
+caption:
+  # JSON Schema para validação da saída
+  output_schema:
+    type: object
+    required:
+      - descricao_curta
+      - descricao_longa
+      - palavras_chave
+      - elementos_visuais
+      - contexto_temporal
+      - analise_cultural
+      - qualidade_tecnica
+    properties:
+      descricao_curta:
+        type: string
+        minLength: 1
+      descricao_longa:
+        type: string
+        minLength: 1
+      palavras_chave:
+        type: array
+        items:
+          type: string
+        minItems: 1
+      elementos_visuais:
+        type: object
+        required:
+          - pessoas
+          - cenario
+          - objetos
+          - cores_predominantes
+        properties:
+          pessoas:
+            type: string
+          cenario:
+            type: string
+          objetos:
+            type: string
+          cores_predominantes:
+            type: array
+            items:
+              type: string
+      contexto_temporal:
+        type: object
+        required:
+          - epoca_estimada
+          - indicadores
+        properties:
+          epoca_estimada:
+            type: string
+          indicadores:
+            type: string
+      analise_cultural:
+        type: object
+        required:
+          - elementos_carnavalescos
+          - referencias_culturais
+          - significado
+        properties:
+          elementos_carnavalescos:
+            type: string
+          referencias_culturais:
+            type: string
+          significado:
+            type: string
+      qualidade_tecnica:
+        type: object
+        required:
+          - tipo
+          - qualidade
+          - observacoes
+        properties:
+          tipo:
+            type: string
+          qualidade:
+            type: string
+          observacoes:
+            type: string
+      observacoes_adicionais:
+        type: string
+
+  system_prompt: |
+    Você é um especialista em análise de imagens culturais e patrimônio histórico brasileiro, com foco especial em carnaval carioca e manifestações culturais populares.
+
+    Sua tarefa é analisar imagens do acervo histórico do Bloco Suvaco de Cristo e gerar descrições detalhadas, precisas e estruturadas que preservem o contexto histórico e cultural.
+
+  user_prompt: |
+    ## CONTEXTO
+    Esta imagem faz parte do acervo histórico do Bloco "Suvaco de Cristo", um tradicional
+    bloco de carnaval do Rio de Janeiro, Brasil. O acervo documenta a história do bloco
+    através de fotografias, vídeos, documentos e outros materiais.
+
+    ## INSTRUÇÕES
+    Analise a imagem fornecida com atenção aos seguintes aspectos:
+
+    1. **Conteúdo Visual**: O que está representado na imagem?
+    2. **Contexto Cultural**: Elementos que remetem ao carnaval, cultura brasileira ou carioca
+    3. **Elementos Históricos**: Indícios de época, vestimentas, cenários, objetos
+    4. **Pessoas e Ação**: Atividades, expressões, interações sociais
+    5. **Atmosfera**: Clima, emoções, energia transmitida pela cena
+
+    ## FORMATO DE SAÍDA
+    Gere um JSON válido (usando ```json e ```) com a seguinte estrutura:
+
+    {
+      "descricao_curta": "Uma frase concisa descrevendo a cena principal",
+      "descricao_longa": "Descrição detalhada e contextualizada incluindo elementos visuais, culturais, históricos e atmosfera",
+      "palavras_chave": [
+        "lista", "de", "palavras-chave", "relevantes", "para", "indexação"
+      ],
+      "elementos_visuais": {
+        "pessoas": "Descrição das pessoas presentes (quantidade, vestimentas, ações)",
+        "cenario": "Descrição do local, ambiente e cenário",
+        "objetos": "Objetos e elementos relevantes visíveis",
+        "cores_predominantes": ["cor1", "cor2", "cor3"]
+      },
+      "contexto_temporal": {
+        "epoca_estimada": "Estimativa de época/década se identificável",
+        "indicadores": "Elementos que indicam a época (vestimentas, tecnologia, etc.)"
+      },
+      "analise_cultural": {
+        "elementos_carnavalescos": "Elementos específicos do carnaval identificados",
+        "referencias_culturais": "Referências à cultura carioca, brasileira ou popular",
+        "significado": "Significado cultural ou simbólico da cena"
+      },
+      "qualidade_tecnica": {
+        "tipo": "fotografia/vídeo/documento/outro",
+        "qualidade": "excelente/boa/regular/baixa",
+        "observacoes": "Observações sobre aspectos técnicos (foco, iluminação, etc.)"
+      },
+      "observacoes_adicionais": "Qualquer observação adicional interessante, curiosa ou relevante sobre a imagem"
+    }
+
+    ## DIRETRIZES
+    - Seja descritivo e objetivo, mas também sensível ao contexto cultural
+    - Use linguagem clara e acessível
+    - Destaque elementos únicos ou interessantes
+    - Se não conseguir identificar algo com certeza, indique como "não identificável" ou "possivelmente"
+    - Evite julgamentos ou interpretações muito subjetivas
+    - Foque em preservar o valor histórico e cultural do registro
+
+    ## IMAGEM
+    {image_tag}
+
+# =============================================================================
+# PROMPT 2: CLASSIFICAÇÃO DE CATEGORIAS
+# =============================================================================
+
+classification:
+  # ---------------------------------------------------------------------------
+  # ZERO-SHOT BASIC: No examples, no class descriptions
+  # ---------------------------------------------------------------------------
+  zero_shot_basic:
+    # JSON Schema para validação da saída
+    output_schema:
+      type: object
+      required:
+        - classificacao_categorias
+      properties:
+        classificacao_categorias:
+          type: object
+          # Nota: As categorias são dinâmicas, então não podemos validar as keys específicas
+          # Mas podemos validar que cada categoria tem a estrutura correta
+          patternProperties:
+            ".*":
+              type: object
+              required:
+                - valor
+                - justificativa
+              properties:
+                valor:
+                  type: integer
+                  enum: [0, 1]
+                justificativa:
+                  type: string
+          minProperties: 1
+
+    system_prompt: |
+      Você é um especialista em classificação de imagens do carnaval carioca, com profundo conhecimento sobre blocos de rua, escolas de samba e manifestações culturais do Rio de Janeiro.
+
+      Sua tarefa é classificar imagens do acervo histórico do Bloco Suvaco de Cristo em categorias predefinidas, identificando elementos visuais específicos presentes nas fotografias.
+
+    user_prompt: |
+      ## CONTEXTO
+      Esta imagem faz parte do acervo histórico do Bloco "Suvaco de Cristo", um tradicional
+      bloco de carnaval do Rio de Janeiro, Brasil.
+
+      ## TAREFA
+      Classifique esta imagem nas categorias listadas abaixo. Para cada categoria, atribua:
+      - **valor**: 0 (ausente) ou 1 (presente)
+      - **justificativa**: Se valor=1, explique brevemente o que você vê (máx 15 palavras)
+
+      ## CATEGORIAS
+      {categories_list}
+
+      ## FORMATO DE SAÍDA
+      Gere um JSON válido (usando ```json e ```) com a seguinte estrutura:
+
+      {{
+        "classificacao_categorias": {{
+          "categoria_1": {{
+            "valor": 0,
+            "justificativa": ""
+          }},
+          "categoria_2": {{
+            "valor": 1,
+            "justificativa": "Descrição breve do que foi identificado"
+          }}
+        }}
+      }}
+
+      ## DIRETRIZES
+      - Seja conservador: marque 1 **apenas** se o elemento está **claramente visível**
+      - Se houver dúvida, marque 0
+      - Justificativas devem ser objetivas e descritivas
+      - Não invente elementos que não estão na imagem
+      - Foque em evidências visuais concretas
+
+      ## IMAGEM
+      {image_tag}
+
+  # ---------------------------------------------------------------------------
+  # ZERO-SHOT WITH DESCRIPTIONS: No examples, but with detailed class descriptions
+  # ---------------------------------------------------------------------------
+  zero_shot_with_descriptions:
+    # JSON Schema para validação da saída
+    output_schema:
+      type: object
+      required:
+        - classificacao_categorias
+      properties:
+        classificacao_categorias:
+          type: object
+          # Nota: As categorias são dinâmicas, então não podemos validar as keys específicas
+          # Mas podemos validar que cada categoria tem a estrutura correta
+          patternProperties:
+            ".*":
+              type: object
+              required:
+                - valor
+                - justificativa
+              properties:
+                valor:
+                  type: integer
+                  enum: [0, 1]
+                justificativa:
+                  type: string
+          minProperties: 1
+
+    system_prompt: |
+      Você é um especialista em classificação de imagens do carnaval carioca, com profundo conhecimento sobre blocos de rua, escolas de samba e manifestações culturais do Rio de Janeiro.
+
+      Sua tarefa é classificar imagens do acervo histórico do Bloco Suvaco de Cristo em categorias predefinidas, identificando elementos visuais específicos presentes nas fotografias.
+
+    user_prompt: |
+      ## CONTEXTO
+      Esta imagem faz parte do acervo histórico do Bloco "Suvaco de Cristo", um tradicional
+      bloco de carnaval do Rio de Janeiro, Brasil.
+
+      ## TAREFA
+      Classifique esta imagem nas categorias listadas abaixo. Para cada categoria, atribua:
+      - **valor**: 0 (ausente) ou 1 (presente)
+      - **justificativa**: Se valor=1, explique brevemente o que você vê (máx 15 palavras)
+
+      ## CATEGORIAS E DESCRIÇÕES
+      Abaixo estão as categorias com suas respectivas descrições:
+
+      - **adereços**: Peças ou objetos que complementam fantasias ou são usados para enfeite, como anéis, pulseiras, brincos, colares, cintos, chapéus ou adornos.
+
+      - **baianas**: Trecho do desfile em que está a ala das baianas: formação de mulheres que desfilam nas escolas de samba homenageando as "tias baianas".
+
+      - **bateria**: Membros participantes da bateria ou trecho do desfile em que está a ala da bateria, formada por pessoas que tocam instrumentos de percussão.
+
+      - **camiseta**: Arte, ilustração ou versão física da camiseta oficial do bloco de algum ano.
+
+      - **concentração**: Momento em que os foliões, músicos e organização estão se reunindo antes do início do desfile do bloco. Estamos catalogando como concentração todo material registrado na rua Diamantina e na descida da rua Faro, ou seja, tudo o que acontece antes do grupo chegar na rua Jardim Botânico e no carro de som.
+
+      - **desfile**: Tudo que envolve o momento em que as apresentações do desfile estão efetivamente ocorrendo.
+
+      - **ensaio**: Momento de reunião de membros que serve como etapa de preparação e de testes antes do desfile oficial.
+
+      - **estandarte/bandeira**: Arte, ilustração ou versão física do estandarte ou da bandeira do bloco.
+
+      - **fantasia**: Pessoas no bloco vestidas com qualquer tipo de fantasia de carnaval.
+
+      - **foliões**: Pessoas que estão participando e/ou curtindo o bloco. Pode ser multidão ou pequenos grupos, ou até uma só pessoa.
+
+      - **imprensa**: Qualquer matéria, impressa ou televisiva, de jornal/blog em que há referência ou citação ao bloco.
+
+      - **letra**: Letra dos sambas do bloco.
+
+      - **mestre-sala**: Homem que exerce o papel de mestre-sala do desfile. Está geralmente acompanhado da porta-bandeira, utilizando roupa característica e chapéu.
+
+      - **multidão**: Conjunto grande de pessoas preenchendo as ruas de realização do desfile.
+
+      - **porta-bandeira**: Mulher que exerce o papel de porta-bandeira do desfile. Está geralmente acompanhada do mestre-sala, utilizando roupa característica e segurando a bandeira do bloco.
+
+      - **premiação**: Tudo que envolve a recepção de prêmios para o bloco Suvaco do Cristo.
+
+      - **produção**: Membros ou artefatos que auxiliam ou fazem parte do processo de elaboração, decoração ou acontecimento do bloco.
+
+      - **samba**: Audio ou letra de sambas do bloco Suvaco do Cristo.
+
+      - **serpentina de ouro**: Evento de premiação da Serpentina de Ouro.
+
+      - **show/festa**: Apresentação musical com banda ou artista tocando em um palco. Ou pessoas animadas reunidas em um ambiente, em geral, fechado, celebrando algo. Geralmente o ambiente apresenta decoração festiva, comidas, bebidas e atividades sociais informais. Eventos fora do carnaval, por exemplo: churrasco, feijoada, etc.
+
+      - **suvaquinho**: Ala infantil do bloco composta principalmente por crianças.
+
+      - **outros**: Nenhuma das palavra-chave existentes se adequou bem.
+
+      ## FORMATO DE SAÍDA
+      Gere um JSON válido (usando ```json e ```) com a seguinte estrutura:
+
+      {{
+        "classificacao_categorias": {{
+          "categoria_1": {{
+            "valor": 0,
+            "justificativa": ""
+          }},
+          "categoria_2": {{
+            "valor": 1,
+            "justificativa": "Descrição breve do que foi identificado"
+          }}
+        }}
+      }}
+
+      ## DIRETRIZES
+      - Seja conservador: marque 1 **apenas** se o elemento está **claramente visível**
+      - Use as descrições fornecidas para guiar sua classificação
+      - Se houver dúvida, marque 0
+      - Justificativas devem ser objetivas e descritivas
+      - Não invente elementos que não estão na imagem
+      - Foque em evidências visuais concretas
+
+      ## IMAGEM
+      {image_tag}
+
+  # ---------------------------------------------------------------------------
+  # ZERO-SHOT WITH CHAIN-OF-THOUGHT: Guided reasoning before classification
+  # ---------------------------------------------------------------------------
+  zero_shot_cot:
+    # JSON Schema para validação da saída
+    output_schema:
+      type: object
+      required:
+        - classificacao_categorias
+      properties:
+        classificacao_categorias:
+          type: object
+          # Nota: As categorias são dinâmicas, então não podemos validar as keys específicas
+          # Mas podemos validar que cada categoria tem a estrutura correta
+          patternProperties:
+            ".*":
+              type: object
+              required:
+                - valor
+                - justificativa
+              properties:
+                valor:
+                  type: integer
+                  enum: [0, 1]
+                justificativa:
+                  type: string
+          minProperties: 1
+
+    system_prompt: |
+      Você é um especialista em classificação de imagens do carnaval carioca, com profundo conhecimento sobre blocos de rua, escolas de samba e manifestações culturais do Rio de Janeiro.
+
+      Sua tarefa é classificar imagens do acervo histórico do Bloco Suvaco de Cristo em categorias predefinidas, identificando elementos visuais específicos presentes nas fotografias.
+
+    user_prompt: |
+      ## CONTEXTO
+      Esta imagem faz parte do acervo histórico do Bloco "Suvaco de Cristo", um tradicional
+      bloco de carnaval do Rio de Janeiro, Brasil.
+
+      ## TAREFA
+      Você deve classificar esta imagem seguindo um processo de raciocínio em duas etapas:
+
+      ### ETAPA 1: ANÁLISE E RACIOCÍNIO (fora do JSON)
+      Primeiro, analise a imagem cuidadosamente e descreva:
+      1. **Visão Geral**: O que você vê na imagem? Descreva a cena principal.
+      2. **Elementos Identificados**: Liste os elementos visuais mais proeminentes.
+      3. **Raciocínio por Categoria**: Para as categorias mais relevantes, explique seu processo de decisão (por que está presente ou ausente).
+
+      ### ETAPA 2: CLASSIFICAÇÃO FINAL (JSON)
+      Após sua análise, forneça a classificação estruturada em JSON para cada categoria:
+      - **valor**: 0 (ausente) ou 1 (presente)
+      - **justificativa**: Se valor=1, explique brevemente o que você vê (máx 15 palavras)
+
+      ## CATEGORIAS E DESCRIÇÕES
+      Abaixo estão as categorias com suas respectivas descrições:
+
+      - **adereços**: Peças ou objetos que complementam fantasias ou são usados para enfeite, como anéis, pulseiras, brincos, colares, cintos, chapéus ou adornos.
+
+      - **baianas**: Trecho do desfile em que está a ala das baianas: formação de mulheres que desfilam nas escolas de samba homenageando as "tias baianas".
+
+      - **bateria**: Membros participantes da bateria ou trecho do desfile em que está a ala da bateria, formada por pessoas que tocam instrumentos de percussão.
+
+      - **camiseta**: Arte, ilustração ou versão física da camiseta oficial do bloco de algum ano.
+
+      - **concentração**: Momento em que os foliões, músicos e organização estão se reunindo antes do início do desfile do bloco. Estamos catalogando como concentração todo material registrado na rua Diamantina e na descida da rua Faro, ou seja, tudo o que acontece antes do grupo chegar na rua Jardim Botânico e no carro de som.
+
+      - **desfile**: Tudo que envolve o momento em que as apresentações do desfile estão efetivamente ocorrendo.
+
+      - **ensaio**: Momento de reunião de membros que serve como etapa de preparação e de testes antes do desfile oficial.
+
+      - **estandarte/bandeira**: Arte, ilustração ou versão física do estandarte ou da bandeira do bloco.
+
+      - **fantasia**: Pessoas no bloco vestidas com qualquer tipo de fantasia de carnaval.
+
+      - **foliões**: Pessoas que estão participando e/ou curtindo o bloco. Pode ser multidão ou pequenos grupos, ou até uma só pessoa.
+
+      - **imprensa**: Qualquer matéria, impressa ou televisiva, de jornal/blog em que há referência ou citação ao bloco.
+
+      - **letra**: Letra dos sambas do bloco.
+
+      - **mestre-sala**: Homem que exerce o papel de mestre-sala do desfile. Está geralmente acompanhado da porta-bandeira, utilizando roupa característica e chapéu.
+
+      - **multidão**: Conjunto grande de pessoas preenchendo as ruas de realização do desfile.
+
+      - **porta-bandeira**: Mulher que exerce o papel de porta-bandeira do desfile. Está geralmente acompanhada do mestre-sala, utilizando roupa característica e segurando a bandeira do bloco.
+
+      - **premiação**: Tudo que envolve a recepção de prêmios para o bloco Suvaco do Cristo.
+
+      - **produção**: Membros ou artefatos que auxiliam ou fazem parte do processo de elaboração, decoração ou acontecimento do bloco.
+
+      - **samba**: Audio ou letra de sambas do bloco Suvaco do Cristo.
+
+      - **serpentina de ouro**: Evento de premiação da Serpentina de Ouro.
+
+      - **show/festa**: Apresentação musical com banda ou artista tocando em um palco. Ou pessoas animadas reunidas em um ambiente, em geral, fechado, celebrando algo. Geralmente o ambiente apresenta decoração festiva, comidas, bebidas e atividades sociais informais. Eventos fora do carnaval, por exemplo: churrasco, feijoada, etc.
+
+      - **suvaquinho**: Ala infantil do bloco composta principalmente por crianças.
+
+      - **outros**: Nenhuma das palavra-chave existentes se adequou bem.
+
+      ## FORMATO DE RESPOSTA
+      Sua resposta deve seguir este formato:
+
+      ### ANÁLISE DA IMAGEM
+
+      **Visão Geral:**
+      [Descreva a cena principal]
+
+      **Elementos Identificados:**
+      [Liste os elementos visuais proeminentes]
+
+      **Raciocínio por Categoria:**
+      [Para as categorias mais relevantes, explique seu processo de decisão]
+
+      ### CLASSIFICAÇÃO FINAL
+
+      ```json
+      {{
+        "classificacao_categorias": {{
+          "categoria_1": {{
+            "valor": 0,
+            "justificativa": ""
+          }},
+          "categoria_2": {{
+            "valor": 1,
+            "justificativa": "Descrição breve do que foi identificado"
+          }}
+        }}
+      }}
+      ```
+
+      ## DIRETRIZES
+      - Na análise inicial, seja detalhado e descritivo
+      - Explique seu raciocínio antes de tomar decisões
+      - Seja conservador na classificação final: marque 1 **apenas** se o elemento está **claramente visível**
+      - Use as descrições fornecidas para guiar sua análise
+      - Se houver dúvida, marque 0
+      - Justificativas no JSON devem ser objetivas e concisas (máx 15 palavras)
+      - Não invente elementos que não estão na imagem
+      - Foque em evidências visuais concretas
+
+      ## IMAGEM
+      {image_tag}
+
+  # ---------------------------------------------------------------------------
+  # ZERO-SHOT DUAL ROLE: Observer describes, Reviewer classifies
+  # ---------------------------------------------------------------------------
+  zero_shot_dual_role:
+    # JSON Schema para validação da saída
+    output_schema:
+      type: object
+      required:
+        - classificacao_categorias
+      properties:
+        classificacao_categorias:
+          type: object
+          # Nota: As categorias são dinâmicas, então não podemos validar as keys específicas
+          # Mas podemos validar que cada categoria tem a estrutura correta
+          patternProperties:
+            ".*":
+              type: object
+              required:
+                - valor
+                - justificativa
+              properties:
+                valor:
+                  type: integer
+                  enum: [0, 1]
+                justificativa:
+                  type: string
+          minProperties: 1
+
+    system_prompt: |
+      Você é um sistema de classificação de imagens do carnaval carioca com duas perspectivas complementares:
+
+      1. **Observador**: Descreve objetivamente o que vê na imagem, sem fazer julgamentos.
+      2. **Revisor**: Analisa a descrição do Observador e toma decisões de classificação baseadas nas categorias e descrições fornecidas.
+
+      Trabalhando em conjunto, vocês garantem uma classificação precisa e bem fundamentada das imagens do acervo histórico do Bloco Suvaco de Cristo.
+
+    user_prompt: |
+      ## CONTEXTO
+      Esta imagem faz parte do acervo histórico do Bloco "Suvaco de Cristo", um tradicional
+      bloco de carnaval do Rio de Janeiro, Brasil.
+
+      ## TAREFA
+      Você deve classificar esta imagem usando um processo de análise em dois papéis distintos:
+
+      ### PAPEL 1: OBSERVADOR
+      Como **Observador**, sua função é descrever objetivamente o que você vê:
+      - Identifique pessoas, objetos, cenários e ações presentes na imagem
+      - Descreva características visuais relevantes (roupas, instrumentos, ambiente, etc.)
+      - Liste elementos específicos sem fazer interpretações ou classificações
+      - Seja detalhado mas conciso
+
+      ### PAPEL 2: REVISOR
+      Como **Revisor**, sua função é analisar a descrição do Observador e decidir:
+      - Quais categorias estão presentes com base na descrição fornecida
+      - Para cada categoria relevante, justifique sua decisão usando as observações
+      - Compare as observações com as descrições das categorias
+      - Tome decisões conservadoras (marque 1 apenas se houver evidência clara)
+
+      ## CATEGORIAS E DESCRIÇÕES
+      Abaixo estão as categorias com suas respectivas descrições:
+
+      - **adereços**: Peças ou objetos que complementam fantasias ou são usados para enfeite, como anéis, pulseiras, brincos, colares, cintos, chapéus ou adornos.
+
+      - **baianas**: Trecho do desfile em que está a ala das baianas: formação de mulheres que desfilam nas escolas de samba homenageando as "tias baianas".
+
+      - **bateria**: Membros participantes da bateria ou trecho do desfile em que está a ala da bateria, formada por pessoas que tocam instrumentos de percussão.
+
+      - **camiseta**: Arte, ilustração ou versão física da camiseta oficial do bloco de algum ano.
+
+      - **concentração**: Momento em que os foliões, músicos e organização estão se reunindo antes do início do desfile do bloco. Estamos catalogando como concentração todo material registrado na rua Diamantina e na descida da rua Faro, ou seja, tudo o que acontece antes do grupo chegar na rua Jardim Botânico e no carro de som.
+
+      - **desfile**: Tudo que envolve o momento em que as apresentações do desfile estão efetivamente ocorrendo.
+
+      - **ensaio**: Momento de reunião de membros que serve como etapa de preparação e de testes antes do desfile oficial.
+
+      - **estandarte/bandeira**: Arte, ilustração ou versão física do estandarte ou da bandeira do bloco.
+
+      - **fantasia**: Pessoas no bloco vestidas com qualquer tipo de fantasia de carnaval.
+
+      - **foliões**: Pessoas que estão participando e/ou curtindo o bloco. Pode ser multidão ou pequenos grupos, ou até uma só pessoa.
+
+      - **imprensa**: Qualquer matéria, impressa ou televisiva, de jornal/blog em que há referência ou citação ao bloco.
+
+      - **letra**: Letra dos sambas do bloco.
+
+      - **mestre-sala**: Homem que exerce o papel de mestre-sala do desfile. Está geralmente acompanhado da porta-bandeira, utilizando roupa característica e chapéu.
+
+      - **multidão**: Conjunto grande de pessoas preenchendo as ruas de realização do desfile.
+
+      - **porta-bandeira**: Mulher que exerce o papel de porta-bandeira do desfile. Está geralmente acompanhada do mestre-sala, utilizando roupa característica e segurando a bandeira do bloco.
+
+      - **premiação**: Tudo que envolve a recepção de prêmios para o bloco Suvaco do Cristo.
+
+      - **produção**: Membros ou artefatos que auxiliam ou fazem parte do processo de elaboração, decoração ou acontecimento do bloco.
+
+      - **samba**: Audio ou letra de sambas do bloco Suvaco do Cristo.
+
+      - **serpentina de ouro**: Evento de premiação da Serpentina de Ouro.
+
+      - **show/festa**: Apresentação musical com banda ou artista tocando em um palco. Ou pessoas animadas reunidas em um ambiente, em geral, fechado, celebrando algo. Geralmente o ambiente apresenta decoração festiva, comidas, bebidas e atividades sociais informais. Eventos fora do carnaval, por exemplo: churrasco, feijoada, etc.
+
+      - **suvaquinho**: Ala infantil do bloco composta principalmente por crianças.
+
+      - **outros**: Nenhuma das palavra-chave existentes se adequou bem.
+
+      ## FORMATO DE RESPOSTA
+      Sua resposta deve seguir este formato com os dois papéis claramente identificados:
+
+      ### 👁️ OBSERVADOR
+
+      [Descreva objetivamente o que você vê na imagem. Seja detalhado sobre pessoas, objetos, cenários, ações, vestimentas, instrumentos, e outros elementos visuais relevantes. Não faça interpretações ou classificações nesta etapa.]
+
+      ### 🔍 REVISOR
+
+      [Analise a descrição do Observador e raciocine sobre cada categoria relevante:
+      - Para cada categoria que você considera presente, explique por que a descrição do Observador suporta essa classificação
+      - Para categorias ambíguas, explique por que você decidiu marcar como presente ou ausente
+      - Use as descrições das categorias como referência para suas decisões]
+
+      ### 📋 CLASSIFICAÇÃO FINAL
+
+      ```json
+      {{
+        "classificacao_categorias": {{
+          "categoria_1": {{
+            "valor": 0,
+            "justificativa": ""
+          }},
+          "categoria_2": {{
+            "valor": 1,
+            "justificativa": "Descrição breve do que foi identificado"
+          }}
+        }}
+      }}
+      ```
+
+      ## DIRETRIZES
+      - **Observador**: Seja objetivo e descritivo, não interprete ou classifique
+      - **Revisor**: Seja analítico e use a descrição do Observador como base para decisões
+      - Mantenha os dois papéis claramente separados
+      - Seja conservador na classificação: marque 1 **apenas** se houver evidência clara
+      - Use as descrições das categorias para guiar as decisões do Revisor
+      - Se houver dúvida, marque 0
+      - Justificativas no JSON devem ser concisas (máx 15 palavras)
+      - Não invente elementos que não foram observados
+      - Foque em evidências visuais concretas
+
+      ## IMAGEM
+      {image_tag}
+
+
+  

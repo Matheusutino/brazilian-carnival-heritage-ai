@@ -1,0 +1,129 @@
+{
+  "best_params": {
+    "solver": "eigen",
+    "shrinkage": "auto"
+  },
+  "n_trials": 15,
+  "trials": [
+    {
+      "trial": 0,
+      "value": 0.1525413168260822,
+      "params": {
+        "solver": "lsqr",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 1,
+      "value": 0.542649523734594,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 2,
+      "value": 0.14537662320098668,
+      "params": {
+        "solver": "lsqr",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 3,
+      "value": 0.0,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 4,
+      "value": 0.19106694981977654,
+      "params": {
+        "solver": "svd",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 5,
+      "value": 0.16050841376374061,
+      "params": {
+        "solver": "svd",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 6,
+      "value": 0.16485124570513884,
+      "params": {
+        "solver": "svd",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 7,
+      "value": 0.17514009055633625,
+      "params": {
+        "solver": "svd",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 8,
+      "value": 0.09137815994986857,
+      "params": {
+        "solver": "lsqr",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 9,
+      "value": 0.16863906036055257,
+      "params": {
+        "solver": "svd",
+        "shrinkage": null
+      }
+    },
+    {
+      "trial": 10,
+      "value": 0.5625046171805673,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 11,
+      "value": 0.3914724348362548,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 12,
+      "value": 0.5904613213158588,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 13,
+      "value": 0.3861117420867061,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": "auto"
+      }
+    },
+    {
+      "trial": 14,
+      "value": 0.560805547986562,
+      "params": {
+        "solver": "eigen",
+        "shrinkage": "auto"
+      }
+    }
+  ]
+}

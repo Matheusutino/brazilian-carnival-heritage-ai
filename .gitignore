@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+*.egg-info/
+dist/
+build/
+main.ipynb
+
+# Environment
+.env
+credentials.json
+token.pickle
+
+# IDE
+.vscode/
+.idea/
+
+# Dataset
+dataset/
+
+#Claude
+.claude

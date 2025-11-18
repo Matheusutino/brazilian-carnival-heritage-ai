@@ -1,0 +1,136 @@
+{
+  "timestamp": "2025-11-08T17:54:15.798507",
+  "total_methods": 13,
+  "classical_methods": 8,
+  "deep_learning_methods": 5,
+  "best_overall": {
+    "method": "realesrgan_4x",
+    "type": "deep_learning",
+    "scale": "4x",
+    "composite_score": 0.5061129065053935
+  },
+  "best_balance": {
+    "method": "lanczos_4x",
+    "type": "classical",
+    "scale": "4x",
+    "balance_score": 0.5451026587515768
+  },
+  "best_per_metric": {
+    "Sharpness": {
+      "method": "edsr_2x",
+      "type": "deep_learning",
+      "scale": "2x",
+      "score": 2689.449354340567
+    },
+    "Edge_Strength": {
+      "method": "edsr_2x",
+      "type": "deep_learning",
+      "scale": "2x",
+      "score": 57.018902788059386
+    },
+    "Contrast": {
+      "method": "realesrgan_4x",
+      "type": "deep_learning",
+      "scale": "4x",
+      "score": 66.83710973961254
+    },
+    "Self_Consistency": {
+      "method": "nearest_4x",
+      "type": "classical",
+      "scale": "4x",
+      "score": 55.82008440614498
+    },
+    "Oversharp": {
+      "method": "bilinear_4x",
+      "type": "classical",
+      "scale": "4x",
+      "score": 21.48156956004756
+    },
+    "Ringing": {
+      "method": "bilinear_4x",
+      "type": "classical",
+      "scale": "4x",
+      "score": 4.7637969033170435
+    }
+  },
+  "rankings": [
+    {
+      "Method": "realesrgan_4x",
+      "Type": "deep_learning",
+      "Scale": "4x",
+      "Composite_Score": 0.5061129065053935
+    },
+    {
+      "Method": "esrgan_4x",
+      "Type": "deep_learning",
+      "Scale": "4x",
+      "Composite_Score": 0.48542938802082103
+    },
+    {
+      "Method": "edsr_2x",
+      "Type": "deep_learning",
+      "Scale": "2x",
+      "Composite_Score": 0.46861612804845487
+    },
+    {
+      "Method": "realesrgan_2x",
+      "Type": "deep_learning",
+      "Scale": "2x",
+      "Composite_Score": 0.46579667729642854
+    },
+    {
+      "Method": "bicubic_2x",
+      "Type": "classical",
+      "Scale": "2x",
+      "Composite_Score": 0.4647698808939764
+    },
+    {
+      "Method": "lanczos_2x",
+      "Type": "classical",
+      "Scale": "2x",
+      "Composite_Score": 0.46307442183199876
+    },
+    {
+      "Method": "lanczos_4x",
+      "Type": "classical",
+      "Scale": "4x",
+      "Composite_Score": 0.4596914564704101
+    },
+    {
+      "Method": "bicubic_4x",
+      "Type": "classical",
+      "Scale": "4x",
+      "Composite_Score": 0.45856566947080407
+    },
+    {
+      "Method": "edsr_4x",
+      "Type": "deep_learning",
+      "Scale": "4x",
+      "Composite_Score": 0.43634842757089426
+    },
+    {
+      "Method": "nearest_2x",
+      "Type": "classical",
+      "Scale": "2x",
+      "Composite_Score": 0.42783295791130643
+    },
+    {
+      "Method": "bilinear_2x",
+      "Type": "classical",
+      "Scale": "2x",
+      "Composite_Score": 0.4212344058251225
+    },
+    {
+      "Method": "bilinear_4x",
+      "Type": "classical",
+      "Scale": "4x",
+      "Composite_Score": 0.4044817642555286
+    },
+    {
+      "Method": "nearest_4x",
+      "Type": "classical",
+      "Scale": "4x",
+      "Composite_Score": 0.3928529962712577
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-11-13T11:25:50.590871",
+  "best_supervised": {
+    "method": "dinov2-base_lda",
+    "feature_model": "dinov2-base",
+    "classifier": "lda",
+    "macro_f1": 0.6648049776897978,
+    "index": 0
+  },
+  "best_llm": {
+    "model": "meta_llama-4-maverick-17b-128e-instruct (zero_shot_dual_role)",
+    "model_name": "meta_llama-4-maverick-17b-128e-instruct",
+    "strategy": "zero_shot_dual_role",
+    "macro_f1": 0.43907350863758426,
+    "index": 5,
+    "metrics_path": "results/classification/llm/meta_llama-4-maverick-17b-128e-instruct/zero_shot_dual_role/metrics_latest.json",
+    "strategy_dir": "results/classification/llm/meta_llama-4-maverick-17b-128e-instruct/zero_shot_dual_role"
+  },
+  "supervised_stats": {
+    "total_methods": 24,
+    "mean_macro_f1": 0.4252781629504856,
+    "std_macro_f1": 0.1362394673606691,
+    "max_macro_f1": 0.6648049776897978,
+    "min_macro_f1": 0.1635840691700494
+  },
+  "llm_stats": {
+    "total_configurations": 12,
+    "mean_macro_f1": 0.30518874882755037,
+    "std_macro_f1": 0.15684552143018157,
+    "max_macro_f1": 0.43907350863758426,
+    "min_macro_f1": 0.06133534197385159
+  },
+  "comparison": {
+    "supervised_mean_macro_f1": 0.4252781629504856,
+    "llm_mean_macro_f1": 0.30518874882755037
+  }
+}

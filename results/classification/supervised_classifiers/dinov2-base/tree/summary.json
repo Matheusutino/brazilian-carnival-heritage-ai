@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-10-24T13:28:15.380516",
+  "feature_model": "dinov2-base",
+  "classifier_type": "tree",
+  "classifier_name": "Decision Tree",
+  "best_params": {
+    "max_depth": 32,
+    "min_samples_split": 5,
+    "min_samples_leaf": 1,
+    "criterion": "entropy"
+  },
+  "optimization_trials": 15,
+  "n_train": 589,
+  "n_test": 252,
+  "n_categories": 22,
+  "categories": [
+    "adereços",
+    "baianas",
+    "bateria",
+    "camiseta",
+    "concentração",
+    "desfile",
+    "ensaio",
+    "estandarte\n/bandeira",
+    "fantasia",
+    "foliões",
+    "imprensa",
+    "letra",
+    "mestre-sala",
+    "multidão",
+    "porta-bandeira",
+    "premiação",
+    "produção",
+    "samba",
+    "serpentina \nde ouro",
+    "show/festa",
+    "suvaquinho",
+    "outros"
+  ]
+}

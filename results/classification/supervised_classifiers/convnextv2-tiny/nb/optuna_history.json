@@ -1,0 +1,113 @@
+{
+  "best_params": {
+    "var_smoothing": 4.570563099801449e-07
+  },
+  "n_trials": 15,
+  "trials": [
+    {
+      "trial": 0,
+      "value": 0.3841657004714885,
+      "params": {
+        "var_smoothing": 7.459343285726553e-09
+      }
+    },
+    {
+      "trial": 1,
+      "value": 0.36898019603029003,
+      "params": {
+        "var_smoothing": 5.669849511478849e-06
+      }
+    },
+    {
+      "trial": 2,
+      "value": 0.4245033834695225,
+      "params": {
+        "var_smoothing": 4.570563099801449e-07
+      }
+    },
+    {
+      "trial": 3,
+      "value": 0.40096124911065684,
+      "params": {
+        "var_smoothing": 9.84673887361455e-08
+      }
+    },
+    {
+      "trial": 4,
+      "value": 0.39980232255546105,
+      "params": {
+        "var_smoothing": 6.026889128682514e-10
+      }
+    },
+    {
+      "trial": 5,
+      "value": 0.3697358005459694,
+      "params": {
+        "var_smoothing": 6.025215736203857e-10
+      }
+    },
+    {
+      "trial": 6,
+      "value": 0.40151735915166736,
+      "params": {
+        "var_smoothing": 1.9517224641449504e-10
+      }
+    },
+    {
+      "trial": 7,
+      "value": 0.3708862437718052,
+      "params": {
+        "var_smoothing": 2.1423021757741036e-06
+      }
+    },
+    {
+      "trial": 8,
+      "value": 0.41414039418994325,
+      "params": {
+        "var_smoothing": 1.0129197956845736e-07
+      }
+    },
+    {
+      "trial": 9,
+      "value": 0.3693437275514951,
+      "params": {
+        "var_smoothing": 3.470266988650414e-07
+      }
+    },
+    {
+      "trial": 10,
+      "value": 0.4236416790670636,
+      "params": {
+        "var_smoothing": 4.0161396079273e-09
+      }
+    },
+    {
+      "trial": 11,
+      "value": 0.39834571509681876,
+      "params": {
+        "var_smoothing": 4.751755794795173e-09
+      }
+    },
+    {
+      "trial": 12,
+      "value": 0.3730451518080656,
+      "params": {
+        "var_smoothing": 1.0685869282888418e-08
+      }
+    },
+    {
+      "trial": 13,
+      "value": 0.38511449851566604,
+      "params": {
+        "var_smoothing": 9.02636700304861e-07
+      }
+    },
+    {
+      "trial": 14,
+      "value": 0.3919953946636016,
+      "params": {
+        "var_smoothing": 4.516883221875392e-08
+      }
+    }
+  ]
+}

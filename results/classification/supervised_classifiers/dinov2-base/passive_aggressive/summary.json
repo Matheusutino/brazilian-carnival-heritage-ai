@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-10-24T13:39:24.206148",
+  "feature_model": "dinov2-base",
+  "classifier_type": "passive_aggressive",
+  "classifier_name": "Passive Aggressive Classifier",
+  "best_params": {
+    "C": 0.14445251022763064,
+    "loss": "squared_hinge"
+  },
+  "optimization_trials": 15,
+  "n_train": 589,
+  "n_test": 252,
+  "n_categories": 22,
+  "categories": [
+    "adereços",
+    "baianas",
+    "bateria",
+    "camiseta",
+    "concentração",
+    "desfile",
+    "ensaio",
+    "estandarte\n/bandeira",
+    "fantasia",
+    "foliões",
+    "imprensa",
+    "letra",
+    "mestre-sala",
+    "multidão",
+    "porta-bandeira",
+    "premiação",
+    "produção",
+    "samba",
+    "serpentina \nde ouro",
+    "show/festa",
+    "suvaquinho",
+    "outros"
+  ]
+}

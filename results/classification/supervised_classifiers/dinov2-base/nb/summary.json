@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-10-24T13:36:59.091788",
+  "feature_model": "dinov2-base",
+  "classifier_type": "nb",
+  "classifier_name": "Naive Bayes",
+  "best_params": {
+    "var_smoothing": 7.459343285726553e-09
+  },
+  "optimization_trials": 15,
+  "n_train": 589,
+  "n_test": 252,
+  "n_categories": 22,
+  "categories": [
+    "adereços",
+    "baianas",
+    "bateria",
+    "camiseta",
+    "concentração",
+    "desfile",
+    "ensaio",
+    "estandarte\n/bandeira",
+    "fantasia",
+    "foliões",
+    "imprensa",
+    "letra",
+    "mestre-sala",
+    "multidão",
+    "porta-bandeira",
+    "premiação",
+    "produção",
+    "samba",
+    "serpentina \nde ouro",
+    "show/festa",
+    "suvaquinho",
+    "outros"
+  ]
+}

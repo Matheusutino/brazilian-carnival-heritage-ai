@@ -1,0 +1,113 @@
+{
+  "best_params": {
+    "var_smoothing": 7.459343285726553e-09
+  },
+  "n_trials": 15,
+  "trials": [
+    {
+      "trial": 0,
+      "value": 0.546981123746685,
+      "params": {
+        "var_smoothing": 7.459343285726553e-09
+      }
+    },
+    {
+      "trial": 1,
+      "value": 0.49503085927260804,
+      "params": {
+        "var_smoothing": 5.669849511478849e-06
+      }
+    },
+    {
+      "trial": 2,
+      "value": 0.48024800500841835,
+      "params": {
+        "var_smoothing": 4.570563099801449e-07
+      }
+    },
+    {
+      "trial": 3,
+      "value": 0.4999867473706285,
+      "params": {
+        "var_smoothing": 9.84673887361455e-08
+      }
+    },
+    {
+      "trial": 4,
+      "value": 0.5104137899610173,
+      "params": {
+        "var_smoothing": 6.026889128682514e-10
+      }
+    },
+    {
+      "trial": 5,
+      "value": 0.5042798411060047,
+      "params": {
+        "var_smoothing": 6.025215736203857e-10
+      }
+    },
+    {
+      "trial": 6,
+      "value": 0.4631325495794356,
+      "params": {
+        "var_smoothing": 1.9517224641449504e-10
+      }
+    },
+    {
+      "trial": 7,
+      "value": 0.49842188530085574,
+      "params": {
+        "var_smoothing": 2.1423021757741036e-06
+      }
+    },
+    {
+      "trial": 8,
+      "value": 0.5256529967098751,
+      "params": {
+        "var_smoothing": 1.0129197956845736e-07
+      }
+    },
+    {
+      "trial": 9,
+      "value": 0.5253225921163973,
+      "params": {
+        "var_smoothing": 3.470266988650414e-07
+      }
+    },
+    {
+      "trial": 10,
+      "value": 0.4967629956876442,
+      "params": {
+        "var_smoothing": 7.453892933860192e-09
+      }
+    },
+    {
+      "trial": 11,
+      "value": 0.5125257361982186,
+      "params": {
+        "var_smoothing": 8.914401041476785e-09
+      }
+    },
+    {
+      "trial": 12,
+      "value": 0.5142999090019956,
+      "params": {
+        "var_smoothing": 2.0582046976198034e-08
+      }
+    },
+    {
+      "trial": 13,
+      "value": 0.5291532023785211,
+      "params": {
+        "var_smoothing": 1.7706252541669675e-09
+      }
+    },
+    {
+      "trial": 14,
+      "value": 0.5372879775297891,
+      "params": {
+        "var_smoothing": 3.1904899915421893e-09
+      }
+    }
+  ]
+}

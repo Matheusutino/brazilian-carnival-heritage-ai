@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-10-24T13:36:52.057383",
+  "feature_model": "dinov2-base",
+  "classifier_type": "xgb",
+  "classifier_name": "XGBoost",
+  "best_params": {
+    "n_estimators": 202,
+    "max_depth": 4,
+    "learning_rate": 0.012476394272569451,
+    "subsample": 0.9795542149013333,
+    "colsample_bytree": 0.9862528132298237
+  },
+  "optimization_trials": 15,
+  "n_train": 589,
+  "n_test": 252,
+  "n_categories": 22,
+  "categories": [
+    "adereços",
+    "baianas",
+    "bateria",
+    "camiseta",
+    "concentração",
+    "desfile",
+    "ensaio",
+    "estandarte\n/bandeira",
+    "fantasia",
+    "foliões",
+    "imprensa",
+    "letra",
+    "mestre-sala",
+    "multidão",
+    "porta-bandeira",
+    "premiação",
+    "produção",
+    "samba",
+    "serpentina \nde ouro",
+    "show/festa",
+    "suvaquinho",
+    "outros"
+  ]
+}

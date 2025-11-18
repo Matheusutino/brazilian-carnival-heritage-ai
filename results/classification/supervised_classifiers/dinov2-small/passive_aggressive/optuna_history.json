@@ -1,0 +1,129 @@
+{
+  "best_params": {
+    "C": 3.4702669886504163,
+    "loss": "squared_hinge"
+  },
+  "n_trials": 15,
+  "trials": [
+    {
+      "trial": 0,
+      "value": 0.5301269527368468,
+      "params": {
+        "C": 0.0745934328572655,
+        "loss": "hinge"
+      }
+    },
+    {
+      "trial": 1,
+      "value": 0.5342730026760979,
+      "params": {
+        "C": 0.9846738873614566,
+        "loss": "hinge"
+      }
+    },
+    {
+      "trial": 2,
+      "value": 0.5261790105583933,
+      "params": {
+        "C": 0.0019517224641449498,
+        "loss": "hinge"
+      }
+    },
+    {
+      "trial": 3,
+      "value": 0.5628744790780053,
+      "params": {
+        "C": 3.4702669886504163,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 4,
+      "value": 0.5429836132402251,
+      "params": {
+        "C": 14.528246637516036,
+        "loss": "hinge"
+      }
+    },
+    {
+      "trial": 5,
+      "value": 0.5626139467123704,
+      "params": {
+        "C": 0.008260808399079604,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 6,
+      "value": 0.5610843912790763,
+      "params": {
+        "C": 0.14445251022763064,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 7,
+      "value": 0.53331081104649,
+      "params": {
+        "C": 0.004982752357076452,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 8,
+      "value": 0.5523442335140264,
+      "params": {
+        "C": 0.19069966103000435,
+        "loss": "hinge"
+      }
+    },
+    {
+      "trial": 9,
+      "value": 0.373029865294344,
+      "params": {
+        "C": 0.37253938395788866,
+        "loss": "hinge"
+      }
+    },
+    {
+      "trial": 10,
+      "value": 0.5198697174101811,
+      "params": {
+        "C": 69.13375551009112,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 11,
+      "value": 0.5265858239657947,
+      "params": {
+        "C": 3.0240503427727154,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 12,
+      "value": 0.3882067126360907,
+      "params": {
+        "C": 0.011484717919254808,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 13,
+      "value": 0.5197449801679862,
+      "params": {
+        "C": 0.021006926559360123,
+        "loss": "squared_hinge"
+      }
+    },
+    {
+      "trial": 14,
+      "value": 0.3482238192018851,
+      "params": {
+        "C": 5.288158909550559,
+        "loss": "squared_hinge"
+      }
+    }
+  ]
+}

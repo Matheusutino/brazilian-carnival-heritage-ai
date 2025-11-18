@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-10-24T12:12:33.413546",
+  "feature_model": "convnextv2-base",
+  "feature_dim": 1024,
+  "n_train": 589,
+  "n_test": 252,
+  "n_categories": 22,
+  "categories": [
+    "adere\u00e7os",
+    "baianas",
+    "bateria",
+    "camiseta",
+    "concentra\u00e7\u00e3o",
+    "desfile",
+    "ensaio",
+    "estandarte\n/bandeira",
+    "fantasia",
+    "foli\u00f5es",
+    "imprensa",
+    "letra",
+    "mestre-sala",
+    "multid\u00e3o",
+    "porta-bandeira",
+    "premia\u00e7\u00e3o",
+    "produ\u00e7\u00e3o",
+    "samba",
+    "serpentina \nde ouro",
+    "show/festa",
+    "suvaquinho",
+    "outros"
+  ],
+  "classifiers": {
+    "passive_aggressive": {
+      "best_params": {
+        "C": 0.37253938395788866,
+        "loss": "hinge"
+      },
+      "optimization_trials": 15
+    }
+  }
+}
