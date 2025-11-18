@@ -105,6 +105,15 @@ class CaptionAnalyzer:
     # ------------------------------------------------------------------ #
     @classmethod
     def _normalize_model_key(cls, name: Optional[str]) -> str:
+        """
+        Normalize a model name to a standardized key format.
+
+        Args:
+            name: Raw model name from file path or configuration
+
+        Returns:
+            Normalized model key without extensions
+        """
         if not name:
             return ""
         key = str(name).replace("\\", "/").split("/")[-1]
@@ -120,9 +129,18 @@ class CaptionAnalyzer:
 
     @classmethod
     def _format_model_name(cls, raw_name: Optional[str]) -> str:
+        """
+        Format a model name for display purposes.
+
+        Args:
+            raw_name: Raw model name from file path or configuration
+
+        Returns:
+            Formatted, human-readable model name
+        """
         key = cls._normalize_model_key(raw_name)
         if not key:
-            return "Desconhecido"
+            return "Unknown"
         if key in cls.MODEL_DISPLAY_NAMES:
             return cls.MODEL_DISPLAY_NAMES[key]
 
@@ -132,6 +150,15 @@ class CaptionAnalyzer:
 
     @classmethod
     def _model_order_index(cls, raw_name: Optional[str]) -> int:
+        """
+        Get the sort order index for a model name.
+
+        Args:
+            raw_name: Raw model name from file path or configuration
+
+        Returns:
+            Integer index for sorting (models not in sort order go last)
+        """
         key = cls._normalize_model_key(raw_name)
         if key in cls.MODEL_SORT_ORDER:
             return cls.MODEL_SORT_ORDER.index(key)
@@ -143,7 +170,7 @@ class CaptionAnalyzer:
     def _load_dataset(self) -> None:
         """Load dataset metadata for ground-truth captions."""
         if not self.dataset_csv.exists():
-            print(f"⚠ Dataset CSV não encontrado: {self.dataset_csv}")
+            print(f"⚠ Dataset CSV not found: {self.dataset_csv}")
             return
 
         try:
@@ -158,30 +185,30 @@ class CaptionAnalyzer:
         self.dataset_df = df
         self.dataset_map = dict(zip(df["LocalPath"], df[self.reference_column]))
 
-        print(f"✓ Dataset carregado ({len(df)} itens) de {self.dataset_csv}")
+        print(f"✓ Dataset loaded ({len(df)} items) from {self.dataset_csv}")
 
     def _load_results(self) -> None:
         """Load caption predictions from results directory."""
         if not self.results_path.exists():
-            print(f"⚠ Diretório de resultados não encontrado: {self.results_path}")
+            print(f"⚠ Results directory not found: {self.results_path}")
             return
 
         json_files = sorted(self.results_path.glob("**/captions_*.json"))
         if not json_files:
-            print(f"⚠ Nenhum arquivo captions_*.json encontrado em {self.results_path}")
+            print(f"⚠ No captions_*.json files found in {self.results_path}")
             return
 
         for json_path in json_files:
             relative_parts = json_path.relative_to(self.results_path).parts
-            family = relative_parts[0] if len(relative_parts) >= 1 else "desconhecido"
-            model = relative_parts[1] if len(relative_parts) >= 2 else "desconhecido"
+            family = relative_parts[0] if len(relative_parts) >= 1 else "unknown"
+            model = relative_parts[1] if len(relative_parts) >= 2 else "unknown"
             variant = relative_parts[2] if len(relative_parts) >= 3 else ""
 
             try:
                 with open(json_path, "r", encoding="utf-8") as fp:
                     data = json.load(fp)
             except json.JSONDecodeError as exc:
-                print(f"⚠ Falha ao carregar {json_path}: {exc}")
+                print(f"⚠ Failed to load {json_path}: {exc}")
                 continue
 
             for entry in data:
@@ -208,7 +235,7 @@ class CaptionAnalyzer:
                     )
                 )
 
-        print(f"✓ {len(self.records)} captions carregadas de {len(json_files)} arquivos")
+        print(f"✓ {len(self.records)} captions loaded from {len(json_files)} files")
 
     def _extract_caption(self, entry: dict) -> Tuple[str, str, str]:
         """Extract caption text from entry, handling heterogeneous formats."""
@@ -267,7 +294,7 @@ class CaptionAnalyzer:
             if candidate.is_file():
                 return candidate
 
-        print(f"⚠ Imagem não encontrada: {image_path}")
+        print(f"⚠ Image not found: {image_path}")
         return None
 
     # ------------------------------------------------------------------ #
@@ -351,7 +378,7 @@ class CaptionAnalyzer:
                 embedding_pred = self.embedding_model.encode(text, convert_to_tensor=True, show_progress_bar=False)
                 embedding_ref = self.embedding_model.encode(reference, convert_to_tensor=True, show_progress_bar=False)
             except Exception as exc:  # pragma: no cover - device issues
-                print(f"⚠ Falha ao calcular embeddings: {exc}")
+                print(f"⚠ Failed to compute embeddings: {exc}")
                 similarities.append(math.nan)
                 continue
 
@@ -375,7 +402,7 @@ class CaptionAnalyzer:
         references = df.loc[valid_refs, "reference_caption"].tolist()
 
         try:
-            print("📊 Calculando BERTScore (Portuguese)...")
+            print("📊 Computing BERTScore (Portuguese)...")
             # Use multilingual BERT model optimized for Portuguese
             _, _, F1 = bert_score(
                 candidates,
@@ -392,9 +419,9 @@ class CaptionAnalyzer:
             # Fill valid scores
             df.loc[valid_refs, "bertscore_f1"] = F1.cpu().numpy()
 
-            print(f"✓ BERTScore calculado para {len(candidates)} captions")
+            print(f"✓ BERTScore computed for {len(candidates)} captions")
         except Exception as exc:
-            print(f"⚠ Falha ao calcular BERTScore: {exc}")
+            print(f"⚠ Failed to compute BERTScore: {exc}")
 
         return df
 
@@ -441,24 +468,24 @@ class CaptionAnalyzer:
     def enable_embeddings(self, model_name: str) -> None:
         """Load optional embedding model for semantic similarity."""
         if not SentenceTransformer:
-            print("⚠ sentence-transformers não disponível; métrica de embedding desativada.")
+            print("⚠ sentence-transformers not available; embedding metric disabled.")
             return
 
         try:
             self.embedding_model = SentenceTransformer(model_name)
-            print(f"✓ Modelo de embeddings carregado: {model_name}")
+            print(f"✓ Embedding model loaded: {model_name}")
         except Exception as exc:
-            print(f"⚠ Falha ao carregar modelo de embeddings '{model_name}': {exc}")
+            print(f"⚠ Failed to load embedding model '{model_name}': {exc}")
             self.embedding_model = None
 
     def enable_bertscore(self) -> None:
         """Enable BERTScore metric for Portuguese captions."""
         if not BERTSCORE_AVAILABLE:
-            print("⚠ bert-score não disponível; instale com: pip install bert-score")
+            print("⚠ bert-score not available; install with: pip install bert-score")
             return
 
         self.use_bertscore = True
-        print("✓ BERTScore habilitado para português")
+        print("✓ BERTScore enabled for Portuguese")
 
     def build_dataframe(self) -> pd.DataFrame:
         """Build dataframe combining predictions and references."""
@@ -528,8 +555,8 @@ class CaptionAnalyzer:
         df.to_csv(detailed_path, index=False)
         summary.to_csv(summary_path, index=False)
 
-        print(f"✓ Resultados detalhados salvos em {detailed_path}")
-        print(f"✓ Resumo salvo em {summary_path}")
+        print(f"✓ Detailed results saved to {detailed_path}")
+        print(f"✓ Summary saved to {summary_path}")
 
         return detailed_path, summary_path
 
@@ -890,7 +917,7 @@ class CaptionAnalyzer:
         available = df[df["model"].isin(target_models) & df["image_path"].astype(bool)]
 
         if available.empty:
-            print("⚠ Nenhum registro encontrado para os modelos solicitados.")
+            print("⚠ No records found for the requested models.")
             return None
 
         comparisons = []
@@ -921,13 +948,13 @@ class CaptionAnalyzer:
             )
 
         if not comparisons:
-            print("⚠ Nenhuma imagem com legendas de ambos os modelos foi encontrada.")
+            print("⚠ No images found with captions from both models.")
             return None
 
         rng = random.Random(seed)
         sample_count = min(n_samples, len(comparisons))
         if sample_count <= 0:
-            print("⚠ Não há exemplos suficientes para exibir.")
+            print("⚠ Not enough examples to display.")
             return None
 
         if len(comparisons) > sample_count:
@@ -941,7 +968,7 @@ class CaptionAnalyzer:
 
         def _wrap(text: str, width: int = 70) -> str:
             clean = text.strip() if text else ""
-            return textwrap.fill(clean, width=width) if clean else "(sem legenda)"
+            return textwrap.fill(clean, width=width) if clean else "(no caption)"
 
         def _display_name(name: str) -> str:
             return self._format_model_name(name)
@@ -952,7 +979,7 @@ class CaptionAnalyzer:
                 image = Image.open(example["image_file"]).convert("RGB")
             except Exception as exc:
                 ax_img.axis("off")
-                ax_img.text(0.5, 0.5, f"Falha ao abrir imagem:\n{exc}", ha="center", va="center")
+                ax_img.text(0.5, 0.5, f"Failed to open image:\n{exc}", ha="center", va="center")
             else:
                 ax_img.imshow(image)
                 #ax_img.set_title(example["image_label"], fontsize=12, fontweight="bold")
@@ -977,13 +1004,13 @@ class CaptionAnalyzer:
             sections = []
 
             if reference_raw and reference_raw.strip():
-                sections.append(f"Legenda original:\n{reference_text}")
+                sections.append(f"Original Caption:\n{reference_text}")
 
             sections.append(f"{_display_name(blip_model)}:\n{blip_text}")
-            sections.append(f"{_display_name(llama_model)} - Descrição Curta:\n{llama_text}")
+            sections.append(f"{_display_name(llama_model)} - Short Description:\n{llama_text}")
 
             if llama_long_raw and llama_long_raw.strip() and llama_long != llama_text:
-                sections.append(f"{_display_name(llama_model)} - Descrição Completa:\n{llama_long}")
+                sections.append(f"{_display_name(llama_model)} - Full Description:\n{llama_long}")
 
             text_block = "\n\n".join(sections)
             ax_text.text(0, 1, text_block, va="top", ha="left", fontsize=11, transform=ax_text.transAxes)
@@ -1020,7 +1047,7 @@ class CaptionAnalyzer:
             plot_path = self.output_path / "random_caption_examples.png"
             plt.savefig(plot_path, bbox_inches="tight")
             plt.close()
-            print(f"✓ Exemplos aleatórios de legendas salvos: {plot_path}")
+            print(f"✓ Random caption examples saved: {plot_path}")
             return plot_path
         else:
             plt.show()
@@ -1028,46 +1055,46 @@ class CaptionAnalyzer:
 
 
 def parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Analisa resultados de legendas (captions).")
+    parser = argparse.ArgumentParser(description="Analyzes caption results.")
     parser.add_argument(
         "--results",
         type=str,
         default="results/captions",
-        help="Diretório com arquivos captions_*.json",
+        help="Directory containing captions_*.json files",
     )
     parser.add_argument(
         "--dataset",
         type=str,
         default="dataset/catalogacao_with_local_paths.csv",
-        help="CSV com descrições originais (coluna 'LocalPath').",
+        help="CSV with original descriptions (column 'LocalPath').",
     )
     parser.add_argument(
         "--reference-column",
         type=str,
         default="Descrição (informal)",
-        help="Coluna do CSV usada como referência.",
+        help="CSV column used as reference.",
     )
     parser.add_argument(
         "--output",
         type=str,
         default=None,
-        help="Diretório para salvar resultados (default: results/captions/analysis).",
+        help="Directory to save results (default: results/captions/analysis).",
     )
     parser.add_argument(
         "--embedding-model",
         type=str,
         default="paraphrase-multilingual-MiniLM-L12-v2",
-        help="Nome do modelo sentence-transformers para similaridade semântica.",
+        help="Sentence-transformers model name for semantic similarity.",
     )
     parser.add_argument(
         "--no-bertscore",
         action="store_true",
-        help="Desabilitar BERTScore (habilitado por padrão).",
+        help="Disable BERTScore (enabled by default).",
     )
     parser.add_argument(
         "--no-embeddings",
         action="store_true",
-        help="Desabilitar embeddings (habilitado por padrão).",
+        help="Disable embeddings (enabled by default).",
     )
     return parser.parse_args(argv)
 
@@ -1092,14 +1119,14 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
 
     df = analyzer.build_dataframe()
     if df.empty:
-        print("⚠ Nenhum dado disponível para análise.")
+        print("⚠ No data available for analysis.")
         return
 
     summary = analyzer.summarize(df)
     analyzer.save_outputs(df, summary)
 
     # Generate visualizations
-    print("\n=== GERANDO VISUALIZAÇÕES ===")
+    print("\n=== GENERATING VISUALIZATIONS ===")
     analyzer.plot_metric_distributions(df)
     analyzer.plot_model_comparison(summary)
     analyzer.plot_metrics_per_model(summary)
@@ -1107,7 +1134,7 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
     analyzer.plot_random_caption_examples(df)
 
     if not summary.empty:
-        print("\n=== RESUMO POR MODELO ===")
+        print("\n=== MODEL SUMMARY ===")
         print(
             summary.to_string(
                 index=False,

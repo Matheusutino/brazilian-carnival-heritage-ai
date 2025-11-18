@@ -54,7 +54,12 @@ class UpscaleAnalyzer:
         self._load_data()
 
     def _load_data(self):
-        """Load all necessary data"""
+        """
+        Load all upscale metrics data from result files.
+
+        Scans the results directory for *_metrics.json files, extracts method information,
+        and organizes metrics by method type (classical/deep_learning) and scale factor.
+        """
         print("Loading upscale data...")
 
         # Load metrics from all methods
@@ -103,7 +108,12 @@ class UpscaleAnalyzer:
         self._create_dataframes()
 
     def _create_dataframes(self):
-        """Create DataFrames with all organized metrics"""
+        """
+        Create DataFrames with all organized metrics.
+
+        Transforms loaded metrics into pandas DataFrames for easier analysis,
+        including method names, types, scales, and all metric values.
+        """
         rows = []
 
         for method_name, data in self.all_metrics.items():
@@ -130,7 +140,12 @@ class UpscaleAnalyzer:
         self._normalize_metrics()
 
     def _normalize_metrics(self):
-        """Normalize metrics to 0-1 scale"""
+        """
+        Normalize metrics to 0-1 scale for fair comparison.
+
+        Quality metrics (higher is better) are normalized normally.
+        Artifact metrics (lower is better) are inverted during normalization.
+        """
         self.df_normalized = self.df_metrics.copy()
 
         for col in self.metric_cols:
@@ -146,14 +161,27 @@ class UpscaleAnalyzer:
                 self.df_normalized[col] = (self.df_normalized[col] - col_min) / col_range
 
     def _save_figure(self, fig, filename_base: str, dpi: int = 300):
-        """Salvar figura em PNG e PDF."""
+        """
+        Save figure in both PNG and PDF formats.
+
+        Args:
+            fig: Matplotlib figure object to save
+            filename_base: Base filename without extension
+            dpi: Resolution for output images (default: 300)
+        """
         png_path = self.output_path / f'{filename_base}.png'
         pdf_path = self.output_path / f'{filename_base}.pdf'
         fig.savefig(png_path, dpi=dpi, bbox_inches='tight')
         fig.savefig(pdf_path, dpi=dpi, bbox_inches='tight')
 
     def analyze_descriptive_statistics(self):
-        """1. Analysis: Descriptive statistics"""
+        """
+        Perform descriptive statistical analysis of upscaling metrics.
+
+        Computes and displays statistics grouped by method type (classical/deep_learning)
+        and scale factor (2x/4x), including mean, std, min, and max values.
+        Also identifies the best performing method for each metric.
+        """
         print("\n" + "="*80)
         print("1. ANALYSIS: DESCRIPTIVE STATISTICS")
         print("="*80)
@@ -197,7 +225,12 @@ class UpscaleAnalyzer:
             print(f"  {metric:20s}: {best_method:30s} ({method_type}, {scale}) - {best_value:.2f}")
 
     def analyze_all_metrics_comparison(self):
-        """2. Analysis: Comparison of all metrics"""
+        """
+        Create comprehensive comparison visualization of all metrics across methods.
+
+        Generates grouped bar chart showing normalized scores for all metrics,
+        allowing direct comparison of method performance across all dimensions.
+        """
         print("\n" + "="*80)
         print("2. ANALYSIS: ALL METRICS COMPARISON")
         print("="*80)
@@ -251,7 +284,13 @@ class UpscaleAnalyzer:
 
 
     def analyze_scale_comparison(self):
-        """3. Analysis: Comparison by scale factor (2x vs 4x)"""
+        """
+        Compare performance between 2x and 4x scale factors.
+
+        Creates side-by-side bar charts for each metric, showing how methods
+        perform at different upscaling ratios. Only includes methods available
+        in both 2x and 4x configurations.
+        """
         print("\n" + "="*80)
         print("3. ANALYSIS: 2X VS 4X COMPARISON")
         print("="*80)
@@ -346,7 +385,12 @@ class UpscaleAnalyzer:
 
 
     def analyze_heatmap(self):
-        """4. Analysis: Metrics heatmap"""
+        """
+        Generate heatmap visualization of all metrics across methods.
+
+        Creates a color-coded matrix showing normalized metric scores for all methods,
+        making it easy to identify patterns and compare performance at a glance.
+        """
         print("\n" + "="*80)
         print("4. ANALYSIS: METRICS HEATMAP")
         print("="*80)
@@ -370,7 +414,13 @@ class UpscaleAnalyzer:
         print("  ✓ Charts saved: 03_metrics_heatmap.png/.pdf")
 
     def analyze_radar_chart(self):
-        """5. Analysis: Radar chart for multidimensional comparison"""
+        """
+        Create radar/spider charts for multidimensional metric comparison.
+
+        Generates polar plots showing the performance profile of each method across
+        all metrics, facilitating visual identification of strengths and weaknesses.
+        Separate charts are created for 2x and 4x scale factors.
+        """
         print("\n" + "="*80)
         print("5. ANALYSIS: RADAR CHART")
         print("="*80)
@@ -431,7 +481,13 @@ class UpscaleAnalyzer:
             print(f"  ✓ Charts saved: 04_radar_chart_{scale}.png/.pdf")
 
     def analyze_classical_vs_dl(self):
-        """6. Analysis: Classical vs Deep Learning comparison"""
+        """
+        Compare classical interpolation methods against deep learning approaches.
+
+        Creates box plots showing the distribution of metric scores for classical
+        vs deep learning methods, highlighting performance differences between
+        traditional and modern upscaling techniques.
+        """
         print("\n" + "="*80)
         print("6. ANALYSIS: CLASSICAL VS DEEP LEARNING")
         print("="*80)
@@ -467,7 +523,13 @@ class UpscaleAnalyzer:
         print("  ✓ Charts saved: 05_classical_vs_dl.png/.pdf")
 
     def analyze_quality_vs_artifacts(self):
-        """7. Analysis: Quality vs artifacts trade-off"""
+        """
+        Analyze the trade-off between quality improvements and artifact introduction.
+
+        Creates scatter plots showing the relationship between quality metrics
+        (sharpness, edge strength) and artifact metrics (oversharp, ringing),
+        helping identify methods that achieve good balance.
+        """
         print("\n" + "="*80)
         print("7. ANALYSIS: QUALITY VS ARTIFACTS")
         print("="*80)
@@ -519,7 +581,12 @@ class UpscaleAnalyzer:
         print("  ✓ Charts saved: 06_quality_vs_artifacts.png/.pdf")
 
     def analyze_correlation(self):
-        """8. Analysis: Correlation between metrics"""
+        """
+        Compute and visualize correlations between different metrics.
+
+        Generates correlation matrix heatmap showing relationships between metrics,
+        and identifies the strongest correlations to understand metric dependencies.
+        """
         print("\n" + "="*80)
         print("8. ANALYSIS: METRICS CORRELATION")
         print("="*80)
@@ -553,7 +620,13 @@ class UpscaleAnalyzer:
         print("  ✓ Charts saved: 07_correlation_matrix.png/.pdf")
 
     def analyze_ranking(self):
-        """9. Analysis: Overall ranking"""
+        """
+        Create overall ranking of methods based on composite score.
+
+        Calculates a composite score from normalized metrics (quality metrics
+        positively weighted, artifacts negatively weighted) and ranks all methods.
+        Generates bar chart visualization of the top performers.
+        """
         print("\n" + "="*80)
         print("9. ANALYSIS: OVERALL RANKING")
         print("="*80)
@@ -605,7 +678,13 @@ class UpscaleAnalyzer:
         print(f"  ✓ CSV saved: 08_ranking.csv")
 
     def analyze_tradeoff(self):
-        """10. Analysis: Trade-off quality vs artifacts"""
+        """
+        Analyze trade-off between quality and artifact control across methods.
+
+        Calculates quality and artifact scores, plots methods in 2D space to visualize
+        the trade-off, and identifies methods with the best balance between high quality
+        and low artifacts.
+        """
         print("\n" + "="*80)
         print("10. ANALYSIS: TRADE-OFF ANALYSIS")
         print("="*80)
@@ -668,7 +747,13 @@ class UpscaleAnalyzer:
         print(f"  ✓ CSV saved: 09_tradeoff_analysis.csv")
 
     def analyze_visual_examples(self):
-        """11. Analysis: Visual comparison of methods"""
+        """
+        Create side-by-side visual comparison of upscaling methods.
+
+        Loads upscaled images and displays them in a grid layout with cropped/zoomed
+        regions to highlight differences in quality and artifacts. Separate figures
+        are generated for 2x and 4x upscaling.
+        """
         print("\n" + "="*80)
         print("11. ANALYSIS: VISUAL EXAMPLES")
         print("="*80)
@@ -791,7 +876,12 @@ class UpscaleAnalyzer:
             print(f"  ✓ Charts saved: 10_visual_comparison_{scale_factor}.png/.pdf ({n_items} panels)")
 
     def generate_summary_report(self):
-        """Generate final summary report"""
+        """
+        Generate comprehensive summary report of all analyses.
+
+        Creates a JSON file containing key findings including best methods overall,
+        best balance, best per metric, rankings, and analysis metadata.
+        """
         print("\n" + "="*80)
         print("GENERATING FINAL REPORT")
         print("="*80)
@@ -860,7 +950,12 @@ class UpscaleAnalyzer:
         print("="*80)
 
     def run_all_analyses(self):
-        """Execute all analyses"""
+        """
+        Execute complete suite of upscaling analyses.
+
+        Runs all 11 analysis methods in sequence, generating visualizations,
+        statistics, and reports for comprehensive comparison of upscaling methods.
+        """
         print("\n" + "="*80)
         print("STARTING COMPLETE UPSCALING ANALYSIS")
         print("="*80)
@@ -884,7 +979,11 @@ class UpscaleAnalyzer:
 
 
 def main():
-    """Main function"""
+    """
+    Main entry point for upscaling analysis script.
+
+    Initializes the UpscaleAnalyzer with default paths and runs all analyses.
+    """
     analyzer = UpscaleAnalyzer()
     analyzer.run_all_analyses()
 
