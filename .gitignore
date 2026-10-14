@@ -1,26 +1,67 @@
-# Python
+# Python: bytecode, builds and environments
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+.venv/
 venv/
+env/
+ENV/
 *.egg-info/
-dist/
-build/
-main.ipynb
+.eggs/
+/build/
+/dist/
 
-# Environment
+# Tool caches and coverage
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.ipynb_checkpoints/
+/main.ipynb
+
+# Local environment and credentials (keep the example versioned)
 .env
-credentials.json
+.env.*
+!.env.example
+credentials*.json
+token.json
 token.pickle
+settings.local.*
 
-# IDE
+# Private archive data and generated experiment outputs
+/dataset/
+/results/
+/weights/
+/checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.pkl
+*.joblib
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# Editors and local assistant configuration
 .vscode/
 .idea/
+.claude/
 
-# Dataset
-dataset/
-
-#Claude
-.claude
+# Operating system metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini

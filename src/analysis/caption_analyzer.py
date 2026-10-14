@@ -671,7 +671,7 @@ class CaptionAnalyzer:
             ax.text(
                 score + 0.005,
                 bar.get_y() + bar.get_height() / 2,
-                f"{score:.4f}",
+                f"{score:.3f}",
                 va="center",
                 fontsize=10,
                 fontweight="bold",
@@ -719,16 +719,16 @@ class CaptionAnalyzer:
         profile_df["model_key"] = profile_df["model"].apply(self._normalize_model_key)
         profile_df["model_display"] = profile_df["model"].apply(self._format_model_name)
 
-        # ---------- Métricas em caps ----------
+        # -------- METRICS IN CAPS --------
         rename_dict = {m: m.upper() for m in metric_columns}
         profile_df.rename(columns=rename_dict, inplace=True)
         metric_columns_caps = list(rename_dict.values())
 
-        # ---------- Long DF ----------
+        # -------- LONG DF --------
         long_df = (
             profile_df[["model_display", "family"] + metric_columns_caps]
             .melt(id_vars=["model_display", "family"], value_vars=metric_columns_caps,
-                var_name="metric", value_name="score")
+                    var_name="metric", value_name="score")
             .dropna(subset=["score"])
         )
 
@@ -736,81 +736,82 @@ class CaptionAnalyzer:
             print("⚠ No per-model metric data available")
             return None
 
-        # ---------- Marker selection by family ----------
-        marker_map = {
-            "classical": "o",
-            "llm": "X",
-        }
-        # (We no longer need the 'marker' column, seaborn uses 'style')
+        # -------- Marker selection by family --------
+        marker_map = {"classical": "o", "llm": "X"}
 
-        # ---------- CHANGE 1: Define Categorical Order (More Robust) ----------
-
-        # 1. Define the exact order you want
+        # -------- Custom order --------
         custom_model_order = [
             "BLIP", "ViT-GPT2", "GIT",
             "Mistral Small 3.1", "LLaMA 4 - Scout", "LLaMA 4 - Maverick"
         ]
 
-        # 2. Create the final model list (preserving custom order)
         all_models_in_df = long_df["model_display"].unique()
 
         ordered_categories = [
             model for model in custom_model_order
             if model in all_models_in_df
         ]
-        # Add any other models that were not in the list
         ordered_categories.extend(
             [model for model in all_models_in_df if model not in ordered_categories]
         )
 
-        # 3. Apply the order as a Categorical type in Pandas
-        model_cat_type = CategoricalDtype(categories=ordered_categories, ordered=True)
+        model_cat_type = pd.CategoricalDtype(categories=ordered_categories, ordered=True)
         long_df["model_display"] = long_df["model_display"].astype(model_cat_type)
 
-        # ---------- Plot (Using Seaborn) ----------
-        plt.figure(figsize=(max(10, len(metric_columns_caps)*1.2),
-                            max(6, len(profile_df)*0.4)))
+        # -------- RENAME FOR LEGEND --------
+        plot_df = long_df.rename(columns={"model_display": "Model", "family": "Family"})
 
-        # Seaborn 'lineplot' respects the categorical order defined above
+        # -------- PLOT --------
+        fig, ax = plt.subplots(
+            figsize=(max(12, len(metric_columns_caps)*1.5),
+                        max(8, len(profile_df)*0.6))
+        )
+
         sns.lineplot(
-            data=long_df,
+            data=plot_df,
             x="metric",
             y="score",
-            hue="model_display",  # Creates legend and colors by order
-            style="family",       # Uses 'family' for markers (o/X)
-            markers=marker_map,   # Passes the marker dict
-            dashes=False,         # Removes dashing
-            legend="full"         # Ensures that legend is created
+            hue="Model",
+            style="Family",
+            markers=marker_map,
+            dashes=False,
+            linewidth=2.5,
+            markersize=9,
+            ax=ax
         )
 
-        plt.xlabel("Metrics", fontsize=12, fontweight="bold")
-        plt.ylabel("Score", fontsize=12, fontweight="bold")
-        plt.xticks(rotation=45, ha="right")
-        plt.grid(axis="y", alpha=0.3)
+        # -------- LABELS --------
+        ax.set_xlabel("Metrics", fontsize=13, fontweight="bold", labelpad=15)
+        ax.set_ylabel("Score", fontsize=13, fontweight="bold")
 
-        # ---------- CHANGE 2: Adjust Legend Position ----------
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=11)
+        ax.tick_params(axis="y", labelsize=11)
+        ax.grid(axis="y", alpha=0.3)
 
-        # Seaborn creates the legend, we just need to move it
-        plt.legend(
-            # Adjusted from -0.75 to -0.45 to avoid overlapping
-            bbox_to_anchor=(0.5, -0.5),
-            loc="upper center",
-            ncol=4,
-            frameon=False
-            # Seaborn names the title automatically (model_display)
+        # -------- LEGEND CONFIGURATION (IN-PLOT UPPER LEFT) --------
+        ax.legend(
+            loc="upper left",          # Position inside the plot
+            frameon=True,              # Enable box
+            fancybox=True,             
+            shadow=False,
+            ncol=1,                    
+            fontsize=10,
+            edgecolor="gray",          # Box border color
+            borderpad=1
         )
 
-        plt.tight_layout()
+        fig.tight_layout()
 
         if save:
             plot_path = self.output_path / "model_metric_profiles.pdf"
-            plt.savefig(plot_path, bbox_inches="tight")
+            fig.savefig(plot_path, bbox_inches="tight")
             plt.close()
             print(f"✓ Model metric profiles plot saved: {plot_path}")
             return plot_path
         else:
             plt.show()
             return None
+
 
 
     def plot_family_metrics_comparison(self, df: pd.DataFrame, save: bool = True) -> Optional[Path]:
@@ -875,7 +876,7 @@ class CaptionAnalyzer:
                         f"{v:.3f}",
                         ha="center",
                         va="bottom",
-                        fontsize=9,
+                        fontsize=15,
                         fontweight="bold",
                     )
 
@@ -1044,7 +1045,7 @@ class CaptionAnalyzer:
                 fig.add_artist(line)
 
         if save:
-            plot_path = self.output_path / "random_caption_examples.png"
+            plot_path = self.output_path / "random_caption_examples.pdf"
             plt.savefig(plot_path, bbox_inches="tight")
             plt.close()
             print(f"✓ Random caption examples saved: {plot_path}")

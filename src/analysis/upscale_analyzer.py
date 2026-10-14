@@ -9,11 +9,15 @@ from math import pi, ceil
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import matplotlib
+# Força o uso de uma janela externa interativa
+matplotlib.use('TkAgg') 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from PIL import Image
+from matplotlib.widgets import RectangleSelector
 
 warnings.filterwarnings('ignore')
 
@@ -22,6 +26,61 @@ plt.style.use('seaborn-v0_8-darkgrid')
 sns.set_palette("husl")
 plt.rcParams['figure.figsize'] = (12, 8)
 plt.rcParams['font.size'] = 10
+
+# Display name mappings for metrics, methods, and types
+METRIC_DISPLAY_NAMES = {
+    'Sharpness': 'Sharpness',
+    'Edge_Strength': 'Edge Strength',
+    'Contrast': 'Contrast',
+    'Oversharp': 'Oversharpening',
+    'Ringing': 'Ringing Artifacts',
+    'Self_Consistency': 'Self Consistency'
+}
+
+METHOD_DISPLAY_NAMES = {
+    'bicubic': 'Bicubic',
+    'bilinear': 'Bilinear',
+    'nearest': 'Nearest Neighbor',
+    'lanczos': 'Lanczos',
+    'edsr': 'EDSR',
+    'ersgan': 'ERSGAN',
+    'realesrgan': 'Real-ESRGAN'
+}
+
+TYPE_DISPLAY_NAMES = {
+    'classical': 'Classical',
+    'deep_learning': 'Deep Learning'
+}
+
+
+def format_method_name(name: str) -> str:
+    """
+    Format method name for display.
+    Removes scale suffix and applies proper capitalization.
+    """
+    base = name.replace('_2x', '').replace('_4x', '').lower()
+
+    # Try exact match first
+    if base in METHOD_DISPLAY_NAMES:
+        return METHOD_DISPLAY_NAMES[base]
+
+    # Try partial match (for cases with additional suffixes)
+    for key, value in METHOD_DISPLAY_NAMES.items():
+        if base.startswith(key) or base.endswith(key):
+            return value
+
+    # Fallback: generic title case
+    return base.replace('_', ' ').title()
+
+
+def format_type_name(type_name: str) -> str:
+    """Format type name for display."""
+    return TYPE_DISPLAY_NAMES.get(type_name, type_name.replace('_', ' ').title())
+
+
+def format_metric_name(metric_name: str) -> str:
+    """Format metric name for display."""
+    return METRIC_DISPLAY_NAMES.get(metric_name, metric_name.replace('_', ' ').title())
 
 
 class UpscaleAnalyzer:
@@ -101,8 +160,8 @@ class UpscaleAnalyzer:
                 }
 
         print(f"  ✓ Total methods: {len(self.all_metrics)}")
-        print(f"    - Classical: {sum(1 for m in self.all_metrics.values() if m['type'] == 'classical')}")
-        print(f"    - Deep Learning: {sum(1 for m in self.all_metrics.values() if m['type'] == 'deep_learning')}")
+        print(f"    - {format_type_name('classical')}: {sum(1 for m in self.all_metrics.values() if m['type'] == 'classical')}")
+        print(f"    - {format_type_name('deep_learning')}: {sum(1 for m in self.all_metrics.values() if m['type'] == 'deep_learning')}")
 
         # Create DataFrame
         self._create_dataframes()
@@ -191,7 +250,7 @@ class UpscaleAnalyzer:
         for method_type in ['classical', 'deep_learning']:
             subset = self.df_metrics[self.df_metrics['Type'] == method_type][self.metric_cols]
             print(f"\n{'='*70}")
-            print(f"  {method_type.upper().replace('_', ' ')}")
+            print(f"  {format_type_name(method_type).upper()}")
             print(f"{'='*70}")
             print(subset.describe().T[['mean', 'std', 'min', 'max']])
 
@@ -746,13 +805,14 @@ class UpscaleAnalyzer:
         print(f"  ✓ Charts saved: 09_tradeoff_analysis.png/.pdf")
         print(f"  ✓ CSV saved: 09_tradeoff_analysis.csv")
 
+    from matplotlib.widgets import RectangleSelector
+    from PIL import Image
+    from math import ceil
+
     def analyze_visual_examples(self):
         """
         Create side-by-side visual comparison of upscaling methods.
-
-        Loads upscaled images and displays them in a grid layout with cropped/zoomed
-        regions to highlight differences in quality and artifacts. Separate figures
-        are generated for 2x and 4x upscaling.
+        Allows interactive selection of zoom region.
         """
         print("\n" + "="*80)
         print("11. ANALYSIS: VISUAL EXAMPLES")
@@ -764,10 +824,10 @@ class UpscaleAnalyzer:
             print("  ⚠ Upscaled directory not found")
             return
 
-        target_image_path = self.dataset_path / 'downloaded' / '1990 1.JPG'
+        target_image_path = self.dataset_path / 'downloaded' / 'cnvlsuvaco12domfev12photogarzon 1157.jpg'
 
         if not target_image_path.exists():
-            print("  ⚠ Target original image not found: 1990 1.JPG")
+            print("  ⚠ Target original image not found: cnvlsuvaco12domfev12photogarzon 1157.jpg")
             return
 
         base_stem = target_image_path.stem
@@ -776,16 +836,77 @@ class UpscaleAnalyzer:
         with Image.open(target_image_path) as img:
             original_image = img.convert('RGB')
 
+        # --- NOVA LÓGICA DE SELEÇÃO INTERATIVA ---
+        print("  → Aguardando seleção de região pelo usuário...")
+        
+        # Variável para armazenar a seleção (start_x, start_y, end_x, end_y)
+        selection_coords = []
+
+        def on_select(eclick, erelease):
+            # Esta função é chamada quando o mouse é solto
+            pass # Apenas precisamos que o seletor funcione visualmente, pegaremos os dados depois
+
+        def confirm_selection(event):
+            plt.close() # Fecha a janela ao pressionar tecla ou clicar fora se desejar
+
+        # Configura a plotagem para seleção
+        fig_sel, ax_sel = plt.subplots(figsize=(12, 8))
+        ax_sel.imshow(original_image)
+        ax_sel.set_title("Selecione a área para Zoom com o mouse.\nFeche a janela quando terminar.")
+        
+        # Cria o seletor
+        toggle_selector = RectangleSelector(
+            ax_sel, 
+            on_select,
+            useblit=True,
+            button=[1],  # Apenas botão esquerdo do mouse
+            minspanx=5, 
+            minspany=5,
+            spancoords='pixels',
+            interactive=True  # Permite redimensionar o retângulo após desenhar
+        )
+        
+        # Bloqueia a execução até a janela ser fechada
+        plt.show(block=True)
+
+        # Recupera as coordenadas do retângulo desenhado
+        # O seletor armazena as coordenadas em extents (xmin, xmax, ymin, ymax)
+        bbox = toggle_selector.extents
+        
+        # Se o usuário fechar sem selecionar nada, usamos um padrão ou abortamos
+        # bbox retorna (0, 0, 0, 0) ou similar se nada for feito, dependendo da versão, 
+        # mas aqui assumimos que ele selecionou algo se a janela abriu.
+        
+        # Converte pixels para porcentagem (formato que seu código original usa)
+        img_w, img_h = original_image.size
+        
+        # Matplotlib extents: xmin, xmax, ymin, ymax
+        x_min, x_max, y_min, y_max = bbox
+        
+        # Converte para a tupla de porcentagens (left, top, right, bottom)
+        self.zoom_region = (
+            x_min / img_w, # Left %
+            y_min / img_h, # Top %
+            x_max / img_w, # Right %
+            y_max / img_h  # Bottom %
+        )
+
+        print(f"  → Região selecionada (proporcional): {self.zoom_region}")
+        # ------------------------------------------
+
         def crop_zoom(image: Image.Image) -> Image.Image:
             width, height = image.size
             left = int(self.zoom_region[0] * width)
             top = int(self.zoom_region[1] * height)
             right = int(self.zoom_region[2] * width)
             bottom = int(self.zoom_region[3] * height)
+            
+            # Garante limites seguros
             left = max(0, min(left, width - 1))
             top = max(0, min(top, height - 1))
             right = max(left + 1, min(right, width))
             bottom = max(top + 1, min(bottom, height))
+            
             return image.crop((left, top, right, bottom))
 
         # Create comparison figures for 2x and 4x
@@ -825,8 +946,10 @@ class UpscaleAnalyzer:
                 if img_path and img_path.exists():
                     try:
                         with Image.open(img_path) as method_img:
+                            # Format method name using global function
+                            display_name = format_method_name(method)
                             comparisons.append({
-                                'label': method,
+                                'label': display_name,
                                 'image': method_img.convert('RGB'),
                                 'method': method,
                                 'type': self.all_metrics[method]['type']
@@ -857,23 +980,181 @@ class UpscaleAnalyzer:
                 if item['method'] is None:
                     title = "Original\n(Reference)"
                 else:
-                    title = f"{item['label']}\n({item['type']})"
+                    # Format type name using global function
+                    display_type = format_type_name(item['type'])
+                    title = f"{item['label']}\n({display_type})"
                 ax.set_title(title, fontsize=12, fontweight='bold')
                 ax.axis('off')
 
             for idx in range(n_items, len(axes)):
                 axes[idx].axis('off')
 
-            fig.suptitle(
-                f'Visual Comparison - {scale_factor} Upscaling\nImage: {base_stem}',
-                fontsize=16,
-                fontweight='bold'
-            )
+            # fig.suptitle(
+            #     f'Visual Comparison - {scale_factor} Upscaling\nImage: {base_stem}',
+            #     fontsize=16,
+            #     fontweight='bold'
+            # )
             fig.tight_layout()
             self._save_figure(fig, f'10_visual_comparison_{scale_factor}', dpi=200)
             plt.close(fig)
 
             print(f"  ✓ Charts saved: 10_visual_comparison_{scale_factor}.png/.pdf ({n_items} panels)")
+
+    def analyze_metrics_by_scale(self):
+        """
+        Create grouped bar charts showing all metrics by model for each scale factor.
+        Creates both normalized (0-1) and raw value versions.
+        One chart for 2x upscaling and another for 4x upscaling.
+        """
+        print("\n" + "=" * 80)
+        print("12. ANALYSIS: METRICS BY SCALE")
+        print("=" * 80)
+
+        # Define consistent color mapping for each method
+        method_colors = {
+            'Bicubic': '#1f77b4',
+            'Bilinear': '#ff7f0e',
+            'Lanczos': '#2ca02c',
+            'Nearest Neighbor': '#d62728',
+            'EDSR': '#9467bd',
+            'ERSGAN': '#8c564b',
+            'Real-ESRGAN': '#e377c2'
+        }
+
+        for scale_factor in ['2x', '4x']:
+            # Filter data for this scale
+            df_scale = self.df_metrics[self.df_metrics['Scale'] == scale_factor].copy()
+
+            if df_scale.empty:
+                print(f"  ⚠ No data found for {scale_factor}")
+                continue
+
+            # Format model names and types
+            df_scale['Display_Name'] = df_scale['Method'].apply(format_method_name)
+            df_scale['Display_Type'] = df_scale['Type'].apply(format_type_name)
+
+            # Normalize metrics to [0, 1]
+            for metric in self.metric_cols:
+                min_val = df_scale[metric].min()
+                max_val = df_scale[metric].max()
+                if max_val > min_val:
+                    df_scale[f'{metric}_norm'] = (df_scale[metric] - min_val) / (max_val - min_val)
+                else:
+                    df_scale[f'{metric}_norm'] = 0.5
+
+            # Define custom sort order for methods
+            method_order = {
+                'Bicubic': 0,
+                'Bilinear': 1,
+                'Lanczos': 2,
+                'Nearest Neighbor': 3,
+                'EDSR': 4,
+                'ERSGAN': 5,
+                'Real-ESRGAN': 6
+            }
+
+            # Sort by custom order
+            df_scale['Sort_Order'] = df_scale['Display_Name'].map(method_order)
+            # If method not in order dict, put it at the end
+            df_scale['Sort_Order'] = df_scale['Sort_Order'].fillna(999)
+            df_scale = df_scale.sort_values('Sort_Order')
+
+            # Prepare data for plotting
+            n_models = len(df_scale)
+            n_metrics = len(self.metric_cols)
+
+            # Create both normalized and raw versions
+            for version in ['normalized', 'raw']:
+                # Set up the bar chart
+                fig, ax = plt.subplots(figsize=(16, 8))
+
+                # Define bar width and positions
+                bar_width = 0.8 / n_models
+                x_pos = np.arange(n_metrics)
+
+                # Determine which values to use
+                use_normalized = (version == 'normalized')
+
+                # Plot bars for each model
+                for i, (_, row) in enumerate(df_scale.iterrows()):
+                    model_name = row['Display_Name']
+                    model_type = row['Display_Type']
+
+                    # Get consistent color for this method
+                    color = method_colors.get(model_name, '#7f7f7f')  # Default gray if not found
+
+                    # Get metric values (normalized or raw)
+                    if use_normalized:
+                        metric_values = [row[f'{metric}_norm'] for metric in self.metric_cols]
+                    else:
+                        metric_values = [row[metric] for metric in self.metric_cols]
+
+                    # Calculate positions for this model's bars
+                    positions = x_pos + (i - n_models / 2 + 0.5) * bar_width
+
+                    # Plot bars
+                    bars = ax.bar(
+                        positions,
+                        metric_values,
+                        bar_width,
+                        label=f"{model_name} ({model_type})",
+                        color=color,
+                        alpha=0.8,
+                        edgecolor='black',
+                        linewidth=0.5
+                    )
+
+                    # Add value labels on top of bars
+                    for bar, value in zip(bars, metric_values):
+                        height = bar.get_height()
+                        ax.text(
+                            bar.get_x() + bar.get_width() / 2,
+                            height + (0.01 if use_normalized else height * 0.01),
+                            f'{value:.2f}',
+                            ha='center',
+                            va='bottom',
+                            fontsize=8
+                        )
+
+                # Customize the plot
+                ax.set_xlabel('Metrics', fontsize=14, fontweight='bold')
+                if use_normalized:
+                    ax.set_ylabel('Normalized Metric Value (0-1)', fontsize=14, fontweight='bold')
+                    ax.set_ylim(0, 1.2)
+                else:
+                    ax.set_ylabel('Metric Value', fontsize=14, fontweight='bold')
+                    # Auto-scale for raw values
+                    max_val = max([row[metric] for _, row in df_scale.iterrows() for metric in self.metric_cols])
+                    ax.set_ylim(0, max_val * 1.15)
+
+                ax.set_xticks(x_pos)
+                ax.set_xticklabels(
+                    [format_metric_name(m) for m in self.metric_cols],
+                    rotation=30,
+                    ha='right'
+                )
+                ax.grid(True, axis='y', alpha=0.3, linestyle='--')
+                ax.set_axisbelow(True)
+
+                # Add legend below the plot
+                ax.legend(
+                    loc='upper center',
+                    bbox_to_anchor=(0.5, -0.22),
+                    ncol=n_models,
+                    fontsize=9,
+                    frameon=False
+                )
+
+                # Adjust layout to prevent label cutoff
+                fig.tight_layout()
+                fig.subplots_adjust(bottom=0.30)
+
+                # Save figure
+                suffix = 'normalized' if use_normalized else 'raw'
+                self._save_figure(fig, f'11_metrics_by_model_{scale_factor}_{suffix}')
+                plt.close(fig)
+
+                print(f"  ✓ Chart saved: 11_metrics_by_model_{scale_factor}_{suffix}.png/.pdf ({n_models} models, {n_metrics} metrics)")
 
     def generate_summary_report(self):
         """
@@ -953,7 +1234,7 @@ class UpscaleAnalyzer:
         """
         Execute complete suite of upscaling analyses.
 
-        Runs all 11 analysis methods in sequence, generating visualizations,
+        Runs all 12 analysis methods in sequence, generating visualizations,
         statistics, and reports for comprehensive comparison of upscaling methods.
         """
         print("\n" + "="*80)
@@ -971,6 +1252,7 @@ class UpscaleAnalyzer:
         self.analyze_ranking()
         self.analyze_tradeoff()
         self.analyze_visual_examples()
+        self.analyze_metrics_by_scale()
         self.generate_summary_report()
 
         print("\n" + "="*80)

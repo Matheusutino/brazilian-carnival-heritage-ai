@@ -506,8 +506,8 @@ class ClassificationAnalyzer:
 
             ax.set_xlabel('Classifier', fontsize=12, fontweight='bold')
             ax.set_ylabel(metric.replace('_', ' '), fontsize=12, fontweight='bold')
-            ax.set_title(f'{metric.replace("_", " ")} by Classifier and Embedding',
-                        fontsize=13, fontweight='bold')
+            # ax.set_title(f'{metric.replace("_", " ")} by Classifier and Embedding',
+            #             fontsize=13, fontweight='bold')
             ax.set_xticks(x)
             classifier_labels = [classifier_name_mapping.get(c, c) for c in classifiers]
             ax.set_xticklabels(classifier_labels, rotation=45, ha='right')
@@ -518,8 +518,8 @@ class ClassificationAnalyzer:
         fig.legend(handles, labels, loc='lower center', ncol=len(embeddings),
                   fontsize=10, bbox_to_anchor=(0.5, -0.02))
 
-        fig.suptitle('Embeddings Comparison Across Classifiers',
-                     fontsize=16, fontweight='bold', y=0.98)
+        # fig.suptitle('Embeddings Comparison Across Classifiers',
+        #              fontsize=16, fontweight='bold', y=0.98)
         fig.tight_layout()
         self._save_figure(fig, '01_embeddings_by_classifier', dpi=300)
         plt.close(fig)
@@ -605,7 +605,7 @@ class ClassificationAnalyzer:
             bars = ax.bar(x, data_for_plot, color=colors, alpha=0.8)
             ax.set_xlabel('Model + Strategy', fontsize=12, fontweight='bold')
             ax.set_ylabel(metric.replace('_', ' '), fontsize=12, fontweight='bold')
-            ax.set_title(f'{metric.replace("_", " ")} Comparison', fontsize=13, fontweight='bold')
+            #ax.set_title(f'{metric.replace("_", " ")} Comparison', fontsize=13, fontweight='bold')
             ax.set_xticks(x)
             ax.set_xticklabels(labels, rotation=45, ha='right', fontsize=8)
             ax.grid(axis='y', alpha=0.3)
@@ -616,7 +616,7 @@ class ClassificationAnalyzer:
                 ax.text(bar.get_x() + bar.get_width()/2., height,
                        f'{value:.3f}', ha='center', va='bottom', fontsize=7)
 
-        fig.suptitle('LLM Methods Comparison', fontsize=16, fontweight='bold', y=1.00)
+        #fig.suptitle('LLM Methods Comparison', fontsize=16, fontweight='bold', y=1.00)
         fig.tight_layout()
         self._save_figure(fig, '02_llm_comparison', dpi=300)
         plt.close(fig)
@@ -797,7 +797,7 @@ class ClassificationAnalyzer:
         ax.set_xlabel('F1 Score', fontsize=12, fontweight='bold')
         ax.set_title('Top 5 Easiest Categories\n(Best Supervised Model)', fontsize=13, fontweight='bold')
         ax.grid(axis='x', alpha=0.3)
-        ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge')
+        ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge', fontsize=15)
 
 
         # ---- SUPERVISED - HARDEST ----
@@ -811,7 +811,7 @@ class ClassificationAnalyzer:
         ax.set_xlabel('F1 Score', fontsize=12, fontweight='bold')
         ax.set_title('Top 5 Hardest Categories\n(Best Supervised Model)', fontsize=13, fontweight='bold')
         ax.grid(axis='x', alpha=0.3)
-        ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge')
+        ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge', fontsize=15)
 
 
         # ---- LLM PLOTS ----
@@ -827,7 +827,7 @@ class ClassificationAnalyzer:
             ax.set_xlabel('F1 Score', fontsize=12, fontweight='bold')
             ax.set_title('Top 5 Easiest Categories\n(Best LLM Model)', fontsize=13, fontweight='bold')
             ax.grid(axis='x', alpha=0.3)
-            ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge')
+            ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge', fontsize=15)
 
             # LLM - Hardest
             ax = axes[3]
@@ -840,10 +840,10 @@ class ClassificationAnalyzer:
             ax.set_xlabel('F1 Score', fontsize=12, fontweight='bold')
             ax.set_title('Top 5 Hardest Categories\n(Best LLM Model)', fontsize=13, fontweight='bold')
             ax.grid(axis='x', alpha=0.3)
-            ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge')
+            ax.bar_label(bars, fmt='%.3f', padding=3, label_type='edge', fontsize=15)
 
 
-        fig.suptitle('Category Difficulty Analysis - Best Models', fontsize=16, fontweight='bold')
+        #fig.suptitle('Category Difficulty Analysis - Best Models', fontsize=16, fontweight='bold')
         fig.tight_layout()
         self._save_figure(fig, '04_category_difficulty', dpi=300)
         plt.close(fig)
@@ -1055,21 +1055,26 @@ class ClassificationAnalyzer:
             offset = (i - len(strategies)/2) * width + width/2
             strategy_label = strategy_mapping.get(strategy.replace('zero_shot_', ''),
                                                  strategy.replace('zero_shot_', ''))
-            bars = ax.bar(x + offset, means, width, yerr=stds,
+            bars = ax.bar(x + offset, means, width,
                          label=strategy_label,
-                         color=colors_bar[i], alpha=0.8,
-                         capsize=3)
+                         color=colors_bar[i], alpha=0.8)
 
             # Add value labels on bars
             for bar, mean in zip(bars, means):
                 height = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width()/2., height + 0.01,
-                       f'{mean:.3f}', ha='center', va='bottom', fontsize=7, rotation=0)
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2.,
+                    height,
+                    f'{mean:.3f}',
+                    ha='center',
+                    va='bottom',
+                    fontsize=15,
+                    fontweight='bold',
+                    rotation=0,
+                )
 
         ax.set_xlabel('Metric', fontsize=13, fontweight='bold')
         ax.set_ylabel('Score', fontsize=13, fontweight='bold')
-        ax.set_title('Prompt Strategy Comparison (Aggregated Across All Models)',
-                    fontsize=14, fontweight='bold')
         ax.set_xticks(x)
         ax.set_xticklabels(metric_labels, rotation=0, ha='center')
         ax.grid(axis='y', alpha=0.3)
@@ -1723,7 +1728,7 @@ class ClassificationAnalyzer:
 
             print("\n  ✓ Charts saved: 06c_false_positives_negatives.png/.pdf")
 
-    def analyze_qualitative_error_cases(self, seed: int = 43, n_samples: int = 6):
+    def analyze_qualitative_error_cases(self, seed: int = 42, n_samples: int = 6):
         """6.6. Random qualitative comparison between best supervised and LLM models."""
         print("\n" + "="*80)
         print("6.6. QUALITATIVE COMPARISON (RANDOM SAMPLES)")
@@ -1808,7 +1813,7 @@ class ClassificationAnalyzer:
             samples=samples_for_plot,
             categories=categories,
             title="Random Comparison — Supervised vs LLM",
-            filename_slug="random_comparison",
+            filename_slug=f"random_comparison_seed_{seed}",
             add_row_dividers=True,
         )
 
@@ -1871,6 +1876,11 @@ class ClassificationAnalyzer:
 
             text_lines: List[str] = []
 
+            # # Add image filename at the beginning
+            # image_filename = Path(sample['image_path']).name
+            # text_lines.append(f"Image: {image_filename}")
+            # text_lines.append("")
+
             if category_display:
                 text_lines.append(f"Target category: {category_display}")
                 if gt_focus is not None:
@@ -1883,9 +1893,9 @@ class ClassificationAnalyzer:
 
             text_lines.extend(
                 [
-                    f"Ground Truth (all classes): {active_labels(gt_vector)}",
-                    f"{primary_label} (all classes): {active_labels(primary_vector)}",
-                    f"{secondary_label} (all classes): {active_labels(secondary_vector)}",
+                    f"Ground Truth: {active_labels(gt_vector)}",
+                    f"Supervised: {active_labels(primary_vector)}",
+                    f"LLM: {active_labels(secondary_vector)}",
                 ]
             )
 
@@ -1906,16 +1916,20 @@ class ClassificationAnalyzer:
 
         fig.tight_layout(rect=[0, 0, 1, 0.95])
 
+        # -------------------------------------------------------------
+        #  🔵 LINHA VERTICAL — agora vai de cima a baixo (0.0 a 1.0)
+        # -------------------------------------------------------------
         for col in range(cols - 1):
             ax_left = axes[0, col]
             ax_right = axes[0, col + 1]
             pos_left = ax_left.get_position()
             pos_right = ax_right.get_position()
             x_line = (pos_left.x1 + pos_right.x0) / 2.0
+
             fig.add_artist(
                 Line2D(
                     [x_line, x_line],
-                    [0.08, 0.94],
+                    [0.0, 1.0],   # <-- FULL HEIGHT
                     transform=fig.transFigure,
                     color="black",
                     linewidth=2.5,
@@ -1923,13 +1937,23 @@ class ClassificationAnalyzer:
                 )
             )
 
+        # -------------------------------------------------------------
+        #  🔵 LINHA HORIZONTAL — agora “um pouco mais abaixo”
+        #     (10% acima da borda inferior do bloco)
+        # -------------------------------------------------------------
         if add_row_dividers and rows > 1:
             for row in range(1, rows):
                 ax_above = axes[row - 1, 0]
                 ax_below = axes[row, 0]
+
                 pos_above = ax_above.get_position()
                 pos_below = ax_below.get_position()
-                y_line = (pos_above.y0 + pos_below.y1) / 2.0
+
+                gap = pos_above.y0 - pos_below.y1
+
+                # 10% acima da borda do bloco inferior
+                y_line = pos_below.y1 + 0.10 * gap
+
                 fig.add_artist(
                     Line2D(
                         [0.03, 0.97],
@@ -1947,6 +1971,7 @@ class ClassificationAnalyzer:
         plt.close(fig)
 
         print(f"     ✓ Painel visual salvo: {filename}.png/.pdf")
+
 
     def analyze_additional_insights(self):
         """7. Analysis: Additional useful insights"""
@@ -2132,7 +2157,8 @@ class ClassificationAnalyzer:
         self.analyze_prompts_by_llm()
         self.analyze_confusion_matrices()
         self.analyze_false_positives_negatives()
-        self.analyze_qualitative_error_cases()
+        for seed in [42, 43, 44, 45, 46]:
+            self.analyze_qualitative_error_cases(seed=seed)
         self.analyze_additional_insights()
         self.generate_summary_report()
 
